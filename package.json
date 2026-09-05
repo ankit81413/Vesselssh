@@ -1,0 +1,25 @@
+{
+  "name": "vesselssh",
+  "version": "1.0.0",
+  "description": "Vessel SSH is a web-based GUI for managing Linux servers like AWS EC2 and VPS instances without relying solely on the SSH CLI. It provides a desktop-like interface for terminals, file management, processes, system monitoring, Docker, and multi-server management.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client" : "cd client && npm run dev",
+    "server" : "cd agent && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ankit81413/Vesselssh.git"
+  },
+  "keywords": [
+    "ssh",
+    "cloud"
+  ],
+  "author": "ankit814",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ankit81413/Vesselssh/issues"
+  },
+  "homepage": "https://github.com/ankit81413/Vesselssh#readme"
+}

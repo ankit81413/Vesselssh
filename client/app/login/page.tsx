@@ -1,13 +1,24 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import wallpaper from "@/app/assets/wallpaper.jpg";
+import React, { useEffect, useRef, useState } from "react";
+import wallpaper from "@/app/assets/lockscreenWallpaper.jpg";
 import dp from "@/app/assets/dp.jpg";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 
 export default function LockScreenPage() {
+
+  const router = useRouter();
+
+
+
   const [time, setTime] = useState(new Date());
   const [loginOpen, setLoginOpen] = useState(false);
   const [username, setUsername] = useState("");
+  const [Password, setPassword] = useState("")
+  const [usernamenow, setUsernamenow] = useState(true);
+  const LoginInput = useRef<HTMLInputElement | null>(null);
+  const passInput = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -89,6 +100,31 @@ export default function LockScreenPage() {
     }
   }
 
+  useEffect(() => {
+    if (!usernamenow) {
+      passInput.current?.focus();
+    }
+
+    if(loginOpen){
+      setTimeout(() => {
+        
+        LoginInput.current?.focus();
+      }, 500);
+    }
+  }, [usernamenow,loginOpen]);
+
+  function fetchusername(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setUsernamenow(false)
+    console.log("username fetchd");
+    
+  }
+
+  function SubmitForm(e: React.FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    router.push("/")
+  }
+
   const displayHour = time.getHours() % 12 || 12;
   const displayMinute = time.getMinutes().toString().padStart(2, "0");
   const period = time.getHours() >= 12 ? "PM" : "AM";
@@ -120,7 +156,12 @@ export default function LockScreenPage() {
               </div>
             </div>
 
-            <form className="mt-8" onSubmit={(e) => e.preventDefault()}>
+            <form
+              className={`mt-8 usenameForm ${usernamenow ? "block" : "hidden"}`}
+              onSubmit={(e) => {
+                fetchusername(e);
+              }}
+            >
               <div className="mx-auto flex h-11 w-full max-w-[310px] items-center overflow-hidden rounded-[6px] bg-zinc-100 text-zinc-950 shadow-lg shadow-black/30 ring-1 ring-white/20 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-[#e95420]">
                 <input
                   type="text"
@@ -129,6 +170,35 @@ export default function LockScreenPage() {
                   className="min-w-0 flex-1 bg-transparent px-4 text-[15px] font-medium outline-none placeholder:text-zinc-500"
                   placeholder="Tony_stark"
                   aria-label="Username"
+                  ref={LoginInput}
+                />
+                <button
+                  type="submit"
+                  aria-label="Continue"
+                  className="grid h-11 w-11 shrink-0 place-items-center bg-[#e95420] text-white transition hover:bg-[#c34113] active:bg-[#ad3510]"
+                >
+                  <i className="fa-solid fa-right-long text-sm"></i>
+                </button>
+              </div>
+            </form>
+
+            <form
+              className={`mt-8 passwordForm ${
+                usernamenow ? "hidden" : "block"
+              }`}
+              onSubmit={(e)=>{
+                SubmitForm(e)
+              }}
+            >
+              <div className="mx-auto flex h-11 w-full max-w-[310px] items-center overflow-hidden rounded-[6px] bg-zinc-100 text-zinc-950 shadow-lg shadow-black/30 ring-1 ring-white/20 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-[#e95420]">
+                <input
+                  type="text"
+                  value={Password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="min-w-0 flex-1 bg-transparent px-4 text-[15px] font-medium outline-none placeholder:text-zinc-500"
+                  placeholder="Password"
+                  aria-label="Password"
+                  ref={passInput}
                 />
                 <button
                   type="submit"
