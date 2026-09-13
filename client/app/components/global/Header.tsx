@@ -13,7 +13,7 @@ export default function Header({clock,date} : HeaderProps) {
           className="flex items-center gap-2 rounded px-2 py-1 hover:bg-white/10"
           aria-label="Open Vessel menu"
         >
-          <Image src="/logo.svg" width={100} height={100} className="h-8" alt="VesselSSH"/>
+          <Image src="/logo.svg" width={100} height={100} className="h-8 w-15" alt="VesselSSH"/>
         </button>
         <nav className="hidden items-center gap-3 text-white/72 md:flex">
           <button className="rounded px-2 py-1 hover:bg-white/10">File</button>

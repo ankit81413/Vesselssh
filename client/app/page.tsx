@@ -6,7 +6,7 @@ export default function Home() {
       <section className="flex min-h-screen flex-col">
         <div className="relative flex flex-1 px-4 pb-16 pt-14 sm:px-7">
           <div className="grid h-fit grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-1">
-           <Alert />
+           
           </div>
 
           

@@ -1,13 +1,14 @@
 "use client"
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 
 export default function NotFound() {
-    let Router = useRouter()   
+    let Router = useRouter()
+    let pathName = usePathname()
 
     useEffect(()=>{
-        Router.push("/?alert=not-found")
+        Router.push(`/?alert=route-not-found&alroute=${pathName}`)
     })
   return (
     <div className="text-5xl flex items-center justify-center w-full h-screen bg-black">
