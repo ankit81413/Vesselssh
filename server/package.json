@@ -1,8 +1,11 @@
 {
-  "name": "vesselagent",
+  "name": "vesselserver",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.ts",
+    "dev": "nodemon --exec tsx server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -10,9 +13,15 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "ssh2": "^1.17.0",
     "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
   }
 }

@@ -14,7 +14,6 @@ export default function DesktopLayout({ children }: DesktopLayoutProps) {
   const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
-    setTime(new Date());
     const timer = window.setInterval(() => setTime(new Date()), 1000);
 
     return () => window.clearInterval(timer);

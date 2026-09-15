@@ -10,23 +10,38 @@ const taskbarApps = [
   {
     label: "Terminal",
     icon: "fa-terminal",
-    active: true,
+    isActive: true,
+    isFocused: true,
     tone: "text-emerald-200",
   },
   {
     label: "Files",
     icon: "fa-folder-open",
-    active: false,
+    isActive: true,
+    isFocused: false,
     tone: "text-sky-100",
   },
-  { label: "Browser", icon: "fa-globe", active: false, tone: "text-cyan-100" },
+  {
+    label: "Browser",
+    icon: "fa-globe",
+    isActive: false,
+    isFocused: false,
+    tone: "text-cyan-100",
+  },
   {
     label: "Monitor",
     icon: "fa-chart-simple",
-    active: true,
+    isActive: false,
+    isFocused: false,
     tone: "text-cyan-200",
   },
-  { label: "Settings", icon: "fa-gear", active: false, tone: "text-zinc-100" },
+  {
+    label: "Settings",
+    icon: "fa-gear",
+    isActive: false,
+    isFocused: false,
+    tone: "text-zinc-100",
+  },
 ];
 
 export default function Taskbar({ currentTime }: TaskbarProps) {
@@ -55,8 +70,9 @@ export default function Taskbar({ currentTime }: TaskbarProps) {
               key={item.label}
               title={item.label}
               aria-label={item.label}
+              aria-current={item.isFocused ? "page" : undefined}
               className={`group relative grid h-8 w-8 place-items-center rounded-md transition hover:bg-cyan-100/12 focus:outline-none focus:ring-2 focus:ring-cyan-200/55 ${
-                item.active
+                item.isFocused
                   ? "bg-cyan-100/14 shadow-sm shadow-cyan-950/20"
                   : "bg-transparent"
               }`}
@@ -64,8 +80,10 @@ export default function Taskbar({ currentTime }: TaskbarProps) {
               <i className={`fa-solid ${item.icon} ${item.tone} text-[13px]`} />
               <span
                 className={`absolute bottom-0.5 h-0.5 rounded-full bg-cyan-200 transition-all ${
-                  item.active
+                  item.isFocused
                     ? "w-4 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
+                    : item.isActive
+                    ? "w-2 opacity-80"
                     : "w-1 opacity-0 group-hover:opacity-60"
                 }`}
               />

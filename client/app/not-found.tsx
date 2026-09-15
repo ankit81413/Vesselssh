@@ -4,8 +4,8 @@ import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 
 export default function NotFound() {
-    let Router = useRouter()
-    let pathName = usePathname()
+    const Router = useRouter()
+    const pathName = usePathname()
 
     useEffect(()=>{
         Router.push(`/?alert=route-not-found&alroute=${pathName}`)

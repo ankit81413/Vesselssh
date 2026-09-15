@@ -1,7 +1,7 @@
 "use client";
 import useClickOutside from "@/app/hooks/useClickOutside";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 type alertType = {
   title: string;
@@ -23,48 +23,47 @@ const alertDict: Record<string, alertType> = {
 export default function Alert() {
   const searchParam = useSearchParams();
 
-  const [showalert, setshowAlert] = useState<boolean>(false);
-  const [albuttonsToShow, setalbuttonsToShow] = useState<Array<string>>([]);
-  const [alertTitle, setAlertTitle] = useState<string | null>("");
-  const [alertHeading, setAlertHeading] = useState("");
-  const [alertText, setAlertText] = useState("");
+  const [dismissedAlertKey, setDismissedAlertKey] = useState<string | null>(null);
   const [isBlinking, setIsBlinking] = useState(false);
-  const [okFunction, setOkFunction] = useState<(() => void) | null>(null);
 
   const alertRef = useRef<HTMLDivElement>(null);
 
-  const checkandsetalert = useCallback(
-    (alert: string, alroute: string | null) => {
-      if (alertDict[alert]) {
-        setAlertTitle(() => {
-          let title = "";
-          if (alertDict[alert]["title"].includes("${alertTitle}") && alroute) {
-            title = alertDict[alert]["title"].replace("${alertTitle}", alroute);
-          } else {
-            title = alertDict[alert]["title"].replace("${alertTitle}", "");
-          }
+  const alert = searchParam.get("alert");
+  const alroute = searchParam.get("alroute");
+  const alertKey = alert ? `${alert}:${alroute ?? ""}` : null;
 
-          return title;
-        });
-        setAlertHeading(alertDict[alert].heading);
-        setAlertText(alertDict[alert].text);
-        setalbuttonsToShow(alertDict[alert].albuttons);
-        setOkFunction(() => alertDict[alert].okAction ?? (() => {closeAlert()}));
-        setshowAlert(true);
-      }
-    },
-    []
-  );
-
-  useEffect(() => {
-    const alert = searchParam.get("alert");
-    if (!alert) {
-      setshowAlert(false);
-      return;
+  const alertToShow = useMemo(() => {
+    if (!alert || !alertDict[alert]) {
+      return null;
     }
-    const alroute = searchParam.get("alroute");
-    checkandsetalert(alert, alroute);
-  }, [searchParam, checkandsetalert]);
+
+    const alertData = alertDict[alert];
+    const title = alertData.title.includes("${alertTitle}")
+      ? alertData.title.replace("${alertTitle}", alroute ?? "")
+      : alertData.title;
+
+    return {
+      ...alertData,
+      title,
+    };
+  }, [alert, alroute]);
+
+  const showalert = Boolean(alertToShow && alertKey !== dismissedAlertKey);
+
+  const closeAlert = useCallback(() => {
+    if (alertKey) {
+      setDismissedAlertKey(alertKey);
+    }
+    window.history.replaceState({}, "", window.location.pathname);
+  }, [alertKey]);
+
+  const handheOk = () => {
+    if (alertToShow?.okAction) {
+      alertToShow.okAction();
+    } else {
+      closeAlert();
+    }
+  };
 
   const blinkAlert = useCallback(() => {
     if (!showalert) {
@@ -78,17 +77,6 @@ export default function Alert() {
       window.setTimeout(() => setIsBlinking(false), 760);
     });
   }, [showalert]);
-
-  const closeAlert = () => {
-    setshowAlert(false);
-    window.history.replaceState({}, "", window.location.pathname);
-  };
-
-  const handheOk = ()=>{
-    if (okFunction) {
-      okFunction();
-    }
-  }
 
   useClickOutside(alertRef, blinkAlert);
 
@@ -112,7 +100,7 @@ export default function Alert() {
               }`}
             >
               <span className="text-sm font-medium text-gray-800">
-                {alertTitle}
+                {alertToShow?.title}
               </span>
 
               <button
@@ -158,17 +146,17 @@ export default function Alert() {
 
               <div>
                 <h2 className="text-base font-semibold text-gray-900">
-                  {alertHeading}
+                  {alertToShow?.heading}
                 </h2>
 
                 <p className="mt-1 text-sm leading-5 text-gray-600">
-                  {alertText}
+                  {alertToShow?.text}
                 </p>
               </div>
             </div>
 
             <div className="flex justify-end gap-2 rounded-b-xl border-t border-gray-200 bg-gray-50 px-5 py-3">
-              {albuttonsToShow.includes("cancel") && (
+              {alertToShow?.albuttons.includes("cancel") && (
                 <button className="rounded-md border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
                   Cancel
                 </button>

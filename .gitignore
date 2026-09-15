@@ -1,3 +1,5 @@
-agent/node_modules
-agent/.env
-agent/env
+server/node_modules
+server/.env
+server/env
+
+.env*
