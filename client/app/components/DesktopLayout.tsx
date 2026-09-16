@@ -19,6 +19,11 @@ export default function DesktopLayout({ children }: DesktopLayoutProps) {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    
+    return () => {};
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
       <Image
