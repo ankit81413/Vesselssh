@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import { createSuperUser } from "../services/auth.services.js";
+import db from "../config/db.js";
+
+
+
 
 
 export function setup(req: Request, res: Response) {
@@ -49,4 +53,25 @@ export function setup(req: Request, res: Response) {
             message: "Internal server error"
         });
     }
+}
+
+
+export function checkAdmin(req: Request, res: Response) {
+    const existingAdmin = db
+        .prepare("SELECT id FROM users WHERE role = ? LIMIT 1")
+        .get("SUPERADMIN");
+
+    res.status(200).json({
+        msg: "success",
+        data: {
+            hasAdmin: !!existingAdmin
+        }
+    });
+}
+
+export function login(req: Request, res: Response){
+    const username:string = req.body.username;
+    const password:string = req.body.Password;
+
+    db.prepare("select ")
 }

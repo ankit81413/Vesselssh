@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import DesktopLayout from "@/app/components/DesktopLayout";
+import { Suspense } from "react";
 import "./globals.css";
-import Alert from "./components/ui/Alert";
+import Alert from "./(protected)/components/ui/Alert";
 
 export const metadata: Metadata = {
   title: "Vessel SSH",
@@ -15,8 +15,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" />
       </head>
       <body className="min-h-full flex flex-col">
-       <Alert />
-        <DesktopLayout>{children}</DesktopLayout>
+        <Suspense fallback={null}>
+          <Alert />
+        </Suspense>
+        {children}
       </body>
     </html>
   );

@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import wallpaper from "@/app/assets/lockscreenWallpaper.jpg";
-import dp from "@/app/assets/dp.jpg";
+import wallpaper from "@/app/(protected)/assets/lockscreenWallpaper.jpg";
+import dp from "@/app/(protected)/assets/dp.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function LockScreenPage() {
@@ -17,6 +18,8 @@ export default function LockScreenPage() {
   const [username, setUsername] = useState("");
   const [Password, setPassword] = useState("")
   const [usernamenow, setUsernamenow] = useState(true);
+  const [hasAdmin, setHasAdmin] = useState(true)
+  const [fetchingLoginInfo, setFetchingLoginInfo] = useState(false)
   const LoginInput = useRef<HTMLInputElement | null>(null);
   const passInput = useRef<HTMLInputElement | null>(null);
 
@@ -47,6 +50,25 @@ export default function LockScreenPage() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const url = `${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/checkadmin`;
+        let res = await fetch(url);
+        const data = await res.json();
+
+        if (data.data.hasAdmin) {
+          setHasAdmin(true)
+        } else {
+          setHasAdmin(false)
+        }
+      } catch (error) {
+        console.error("Failed to check admin:", error);
+      }
+    }
+    checkAdmin();
+  }, [])
 
   function getMonthName() {
     switch (time.getMonth()) {
@@ -105,24 +127,47 @@ export default function LockScreenPage() {
       passInput.current?.focus();
     }
 
-    if(loginOpen){
+    if (loginOpen) {
       setTimeout(() => {
-        
+
         LoginInput.current?.focus();
       }, 500);
     }
-  }, [usernamenow,loginOpen]);
+  }, [usernamenow, loginOpen]);
 
   function fetchusername(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setUsernamenow(false)
-    console.log("username fetchd");
-    
+
   }
 
-  function SubmitForm(e: React.FormEvent<HTMLFormElement>){
+  async function SubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    router.push("/")
+    setFetchingLoginInfo(true)
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username, Password
+        })
+      });
+      let data = await res.json()
+
+      if (!res.ok) {
+        throw new Error("Login Failed")
+        return;
+      }
+
+      console.log(data)
+
+    } catch (e) {
+      setFetchingLoginInfo(false)
+      console.error(e)
+    }
+
   }
 
   const displayHour = time.getHours() % 12 || 12;
@@ -137,11 +182,10 @@ export default function LockScreenPage() {
       <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" />
 
       <main
-        className={`relative z-10 grid min-h-screen place-items-center px-6 py-8 transition-all duration-700 ease-out ${
-          loginOpen
-            ? "scale-100 opacity-100 blur-0"
-            : "scale-95 opacity-0 blur-sm"
-        }`}
+        className={`relative z-10 grid min-h-screen place-items-center px-6 py-8 transition-all duration-700 ease-out ${loginOpen
+          ? "scale-100 opacity-100 blur-0"
+          : "scale-95 opacity-0 blur-sm"
+          }`}
       >
         <section className="flex w-full max-w-md justify-center">
           <div className="w-full px-6 py-8 text-center">
@@ -183,10 +227,9 @@ export default function LockScreenPage() {
             </form>
 
             <form
-              className={`mt-8 passwordForm ${
-                usernamenow ? "hidden" : "block"
-              }`}
-              onSubmit={(e)=>{
+              className={`mt-8 passwordForm ${usernamenow ? "hidden" : "block"
+                }`}
+              onSubmit={(e) => {
                 SubmitForm(e)
               }}
             >
@@ -205,7 +248,10 @@ export default function LockScreenPage() {
                   aria-label="Continue"
                   className="grid h-11 w-11 shrink-0 place-items-center bg-[#e95420] text-white transition hover:bg-[#c34113] active:bg-[#ad3510]"
                 >
-                  <i className="fa-solid fa-right-long text-sm"></i>
+                  {!fetchingLoginInfo ?
+                    <i className="fa-solid fa-right-long text-sm"></i>
+                    : <i className="fa-solid fa-spinner fa-spin-snap-8"></i>
+                  }
                 </button>
               </div>
             </form>
@@ -214,14 +260,12 @@ export default function LockScreenPage() {
       </main>
 
       <div
-        className={`absolute inset-0 z-20 overflow-hidden transition-[visibility] duration-700 ${
-          loginOpen ? "invisible" : "visible"
-        }`}
+        className={`absolute inset-0 z-20 overflow-hidden transition-[visibility] duration-700 ${loginOpen ? "invisible" : "visible"
+          }`}
       >
         <div
-          className={`absolute inset-x-0 top-0 h-1/2 overflow-hidden transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-            loginOpen ? "-translate-y-full" : "translate-y-0"
-          }`}
+          className={`absolute inset-x-0 top-0 h-1/2 overflow-hidden transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${loginOpen ? "-translate-y-full" : "translate-y-0"
+            }`}
         >
           <div
             className="absolute inset-x-0 top-0 h-screen bg-cover bg-center"
@@ -232,9 +276,8 @@ export default function LockScreenPage() {
         </div>
 
         <div
-          className={`absolute inset-x-0 bottom-0 h-1/2 overflow-hidden transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-            loginOpen ? "translate-y-full" : "translate-y-0"
-          }`}
+          className={`absolute inset-x-0 bottom-0 h-1/2 overflow-hidden transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${loginOpen ? "translate-y-full" : "translate-y-0"
+            }`}
         >
           <div
             className="absolute inset-x-0 bottom-0 h-screen bg-cover bg-center"
@@ -245,11 +288,10 @@ export default function LockScreenPage() {
         </div>
 
         <main
-          className={`relative z-10 flex min-h-screen flex-col justify-between px-6 py-8 transition-all duration-500 sm:px-10 lg:px-16 ${
-            loginOpen
-              ? "-translate-y-8 opacity-0 blur-sm"
-              : "translate-y-0 opacity-100 blur-0"
-          }`}
+          className={`relative z-10 flex min-h-screen flex-col justify-between px-6 py-8 transition-all duration-500 sm:px-10 lg:px-16 ${loginOpen
+            ? "-translate-y-8 opacity-0 blur-sm"
+            : "translate-y-0 opacity-100 blur-0"
+            }`}
         >
           <header className="flex items-center justify-between text-sm text-white/80">
             <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/15 px-3 py-2 backdrop-blur-md">
@@ -279,7 +321,15 @@ export default function LockScreenPage() {
           </section>
 
           <footer className="flex justify-center sm:justify-end">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+              {hasAdmin ? "" :
+                <Link
+                  href="/setup"
+                  className="flex items-center gap-2 rounded-xl border border-red-500 bg-red-300/10 px-5 py-3 font-medium text-red-200 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-700/30 hover:text-white hover:shadow-cyan-500/20"
+                >
+                  <i className="fa-solid fa-unlock"></i>
+                  sudo
+                </Link>}
               <button
                 onClick={() => {
                   setLoginOpen(true);

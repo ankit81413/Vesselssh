@@ -1,4 +1,4 @@
-import { useFullscreen } from "@/app/hooks/useFullscreen";
+import { useFullscreen } from "@/app/(protected)/hooks/useFullscreen";
 import Image from "next/image";
 import TaskbarClock from "./TaskbarClock";
 

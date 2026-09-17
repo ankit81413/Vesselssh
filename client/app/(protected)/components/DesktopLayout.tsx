@@ -3,8 +3,8 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import Taskbar from "@/app/components/global/Taskbar";
-import wallpaper from "@/app/assets/HomeWallpaper.jpg";
+import Taskbar from "@/app/(protected)/components/global/Taskbar";
+import wallpaper from "@/app/(protected)/assets/HomeWallpaper.jpg";
 
 type DesktopLayoutProps = {
   children: ReactNode;

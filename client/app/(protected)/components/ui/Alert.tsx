@@ -1,5 +1,5 @@
 "use client";
-import useClickOutside from "@/app/hooks/useClickOutside";
+import useClickOutside from "@/app/(protected)/hooks/useClickOutside";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useRef, useState } from "react";
 

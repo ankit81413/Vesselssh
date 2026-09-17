@@ -1,4 +1,4 @@
-import useClickOutside from "@/app/hooks/useClickOutside";
+import useClickOutside from "@/app/(protected)/hooks/useClickOutside";
 import { useMemo, useRef, useState } from "react";
 
 type TaskbarClockProps = {
