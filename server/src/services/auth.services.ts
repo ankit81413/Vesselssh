@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
 
 import db from "../config/db.js";
-import { createSession } from "../utils/session.js";
+import { createSessionServ } from "../utils/session.js";
 
 export function createSuperUser(username: string, password: string) {
   const existing_superUser = db.prepare(`SELECT id FROM users LIMIT 1`).get();
@@ -25,7 +25,7 @@ export function createSuperUser(username: string, password: string) {
             VALUES (?, ?, ?, ?, ?)
     `
   ).run(id, username, passwordHash, "SUPERADMIN", Date.now());
-  const session = createSession(id);
+  const session = createSessionServ(id);
   return {
     user: {
       id,
@@ -51,16 +51,16 @@ export function loginUser(username: string, password: string) {
     | undefined;
 
   if (!user) {
-    throw new Error("Invaluid Username");
+    throw new Error("INVALID_CREDENTIALS");
   }
 
   const passwordValid = bcrypt.compareSync(password, user.password_hash);
 
   if (!passwordValid) {
-    throw new Error("Invalid Credentials");
+    throw new Error("INVALID_CREDENTIALS");
   }
 
-  let session = createSession(user.id)
+  const session = createSessionServ(user.id)
 
   return {
     user: {
@@ -70,4 +70,11 @@ export function loginUser(username: string, password: string) {
     },
     session,
   };
+}
+
+
+export function verifySessionServ(sessionId: unknown) {
+  if (typeof sessionId !== "string" || !sessionId) return false;
+  const session = db.prepare("SELECT id FROM sessions WHERE id = ? AND expires_at > ?").get(sessionId, Date.now());
+  return !!session;
 }

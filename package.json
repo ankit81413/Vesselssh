@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/ankit81413/Vesselssh/issues"
   },
-  "homepage": "https://github.com/ankit81413/Vesselssh#readme"
+  "homepage": "https://github.com/ankit81413/Vesselssh#readme",
+  "dependencies": {
+    "@xterm/xterm": "^6.0.0"
+  }
 }

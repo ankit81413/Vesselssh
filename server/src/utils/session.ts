@@ -3,7 +3,7 @@ import db from "../config/db.js";
 
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
 
-export function createSession(userId: string) {
+export function createSessionServ(userId: string) {
     const sessionId = randomBytes(32).toString("hex");
 
     const expiresAt = Date.now() + SESSION_DURATION;

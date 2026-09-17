@@ -9,7 +9,7 @@ export function proxy(req: NextRequest) {
     return setupMiddleware(req);
   }
 
-  // return sessionMiddleware(req);
+  return sessionMiddleware(req);
 }
 
 export const config = {

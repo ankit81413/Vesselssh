@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import wallpaper from "@/app/(protected)/assets/lockscreenWallpaper.jpg";
+import desktopWallpaper from "@/app/(protected)/assets/HomeWallpaper.jpg";
 import dp from "@/app/(protected)/assets/dp.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -16,10 +17,14 @@ export default function LockScreenPage() {
   const [time, setTime] = useState(new Date());
   const [loginOpen, setLoginOpen] = useState(false);
   const [username, setUsername] = useState("");
-  const [Password, setPassword] = useState("")
+  const [password, setPassword] = useState("")
   const [usernamenow, setUsernamenow] = useState(true);
   const [hasAdmin, setHasAdmin] = useState(true)
   const [fetchingLoginInfo, setFetchingLoginInfo] = useState(false)
+  const [sessionStatus, setSessionStatus] = useState<"checking" | "authenticated" | "anonymous">("checking");
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [sessionError, setSessionError] = useState("");
   const LoginInput = useRef<HTMLInputElement | null>(null);
   const passInput = useRef<HTMLInputElement | null>(null);
 
@@ -35,7 +40,8 @@ export default function LockScreenPage() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key == "Enter") {
+      if (e.target instanceof HTMLElement && e.target.closest("button, input, a")) return;
+      if (e.key == "Enter" && sessionStatus !== "checking" && !loggingOut) {
         setLoginOpen(true);
       }
 
@@ -49,13 +55,55 @@ export default function LockScreenPage() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+  }, [sessionStatus, loggingOut]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/verifySession`, {
+      method: "POST",
+      credentials: "include",
+      cache: "no-store",
+      signal: controller.signal,
+    }).then((response) => {
+      setSessionStatus(response.ok ? "authenticated" : "anonymous");
+    }).catch(() => {
+      if (!controller.signal.aborted) setSessionStatus("anonymous");
+    });
+    return () => controller.abort();
   }, []);
+
+  useEffect(() => {
+    if (!loginOpen || sessionStatus !== "authenticated") return;
+    const timer = window.setTimeout(() => router.push("/"), 500);
+    return () => window.clearTimeout(timer);
+  }, [loginOpen, sessionStatus, router]);
+
+  async function logout() {
+    setLoggingOut(true);
+    setSessionError("");
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Logout failed");
+      setSessionStatus("anonymous");
+      setLoginOpen(false);
+      setUsername("");
+      setPassword("");
+      setUsernamenow(true);
+    } catch {
+      setSessionError("Could not log out. Please try again.");
+    } finally {
+      setLoggingOut(false);
+    }
+  }
 
   useEffect(() => {
     const checkAdmin = async () => {
       try {
         const url = `${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/checkadmin`;
-        let res = await fetch(url);
+        const res = await fetch(url);
         const data = await res.json();
 
         if (data.data.hasAdmin) {
@@ -123,49 +171,49 @@ export default function LockScreenPage() {
   }
 
   useEffect(() => {
-    if (!usernamenow) {
-      passInput.current?.focus();
-    }
-
-    if (loginOpen) {
-      setTimeout(() => {
-
-        LoginInput.current?.focus();
-      }, 500);
-    }
-  }, [usernamenow, loginOpen]);
+    if (!loginOpen || sessionStatus !== "anonymous") return;
+    const timer = window.setTimeout(() => {
+      (usernamenow ? LoginInput : passInput).current?.focus();
+    }, usernamenow ? 500 : 0);
+    return () => window.clearTimeout(timer);
+  }, [usernamenow, loginOpen, sessionStatus]);
 
   function fetchusername(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!username.trim()) return;
+    setUsername(username.trim());
+    setLoginError("");
     setUsernamenow(false)
 
   }
 
   async function SubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (fetchingLoginInfo || !username.trim() || !password) return;
+    setLoginError("");
     setFetchingLoginInfo(true)
     try {
-      let res = await fetch(`${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_VESSEL_SERVER_URL}/api/auth/login`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username, Password
+          username, password
         })
       });
-      let data = await res.json()
-
       if (!res.ok) {
-        throw new Error("Login Failed")
+        setLoginError(res.status === 401 ? "Invalid username or password." : "Unable to log in. Please try again.");
         return;
       }
-
-      console.log(data)
-
-    } catch (e) {
-      setFetchingLoginInfo(false)
-      console.error(e)
+      setPassword("");
+      setSessionStatus("authenticated");
+      setLoginOpen(true);
+    } catch {
+      setLoginError("Could not connect to the server. Please try again.");
+    } finally {
+      setFetchingLoginInfo(false);
     }
 
   }
@@ -177,9 +225,9 @@ export default function LockScreenPage() {
   return (
     <div
       className="relative min-h-screen w-full overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: `url(${wallpaper.src})` }}
+      style={{ backgroundImage: `url(${sessionStatus === "authenticated" ? desktopWallpaper.src : wallpaper.src})` }}
     >
-      <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" />
+      {sessionStatus !== "authenticated" && <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" />}
 
       <main
         className={`relative z-10 grid min-h-screen place-items-center px-6 py-8 transition-all duration-700 ease-out ${loginOpen
@@ -187,6 +235,9 @@ export default function LockScreenPage() {
           : "scale-95 opacity-0 blur-sm"
           }`}
       >
+        {sessionStatus === "authenticated" ? (
+          <div role="status" aria-label="Opening desktop" className="h-12 w-12 animate-spin rounded-full border-4 border-white/30 border-t-white" />
+        ) : sessionStatus === "anonymous" && loginOpen ? (
         <section className="flex w-full max-w-md justify-center">
           <div className="w-full px-6 py-8 text-center">
             <div className="flex justify-center">
@@ -209,6 +260,9 @@ export default function LockScreenPage() {
               <div className="mx-auto flex h-11 w-full max-w-[310px] items-center overflow-hidden rounded-[6px] bg-zinc-100 text-zinc-950 shadow-lg shadow-black/30 ring-1 ring-white/20 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-[#e95420]">
                 <input
                   type="text"
+                  name="username"
+                  autoComplete="username"
+                  required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="min-w-0 flex-1 bg-transparent px-4 text-[15px] font-medium outline-none placeholder:text-zinc-500"
@@ -218,6 +272,7 @@ export default function LockScreenPage() {
                 />
                 <button
                   type="submit"
+                  disabled={fetchingLoginInfo}
                   aria-label="Continue"
                   className="grid h-11 w-11 shrink-0 place-items-center bg-[#e95420] text-white transition hover:bg-[#c34113] active:bg-[#ad3510]"
                 >
@@ -235,8 +290,12 @@ export default function LockScreenPage() {
             >
               <div className="mx-auto flex h-11 w-full max-w-[310px] items-center overflow-hidden rounded-[6px] bg-zinc-100 text-zinc-950 shadow-lg shadow-black/30 ring-1 ring-white/20 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-[#e95420]">
                 <input
-                  type="text"
-                  value={Password}
+                  type="password"
+                  name="password"
+                  autoComplete="current-password"
+                  required
+                  disabled={fetchingLoginInfo}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="min-w-0 flex-1 bg-transparent px-4 text-[15px] font-medium outline-none placeholder:text-zinc-500"
                   placeholder="Password"
@@ -245,6 +304,7 @@ export default function LockScreenPage() {
                 />
                 <button
                   type="submit"
+                  disabled={fetchingLoginInfo}
                   aria-label="Continue"
                   className="grid h-11 w-11 shrink-0 place-items-center bg-[#e95420] text-white transition hover:bg-[#c34113] active:bg-[#ad3510]"
                 >
@@ -255,8 +315,17 @@ export default function LockScreenPage() {
                 </button>
               </div>
             </form>
+            {loginError && <p role="alert" className="mt-4 text-sm text-red-200">{loginError}</p>}
+            {!usernamenow && (
+              <button type="button" disabled={fetchingLoginInfo}
+                onClick={() => { setUsernamenow(true); setPassword(""); setLoginError(""); }}
+                className="mt-4 text-sm text-white/80 hover:text-white disabled:opacity-50">
+                Change username
+              </button>
+            )}
           </div>
         </section>
+        ) : null}
       </main>
 
       <div
@@ -264,7 +333,7 @@ export default function LockScreenPage() {
           }`}
       >
         <div
-          className={`absolute inset-x-0 top-0 h-1/2 overflow-hidden transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${loginOpen ? "-translate-y-full" : "translate-y-0"
+          className={`absolute inset-x-0 top-0 h-1/2 overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${loginOpen ? "-translate-y-full" : "translate-y-0"
             }`}
         >
           <div
@@ -276,7 +345,7 @@ export default function LockScreenPage() {
         </div>
 
         <div
-          className={`absolute inset-x-0 bottom-0 h-1/2 overflow-hidden transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] ${loginOpen ? "translate-y-full" : "translate-y-0"
+          className={`absolute inset-x-0 bottom-0 h-1/2 overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${loginOpen ? "translate-y-full" : "translate-y-0"
             }`}
         >
           <div
@@ -316,13 +385,14 @@ export default function LockScreenPage() {
               {getDayName()}, {time.getDate()} {getMonthName()} | {period}
             </p>
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/62 sm:text-base">
-              Standby access for your remote vessel workspace.
+              {sessionStatus === "authenticated" ? "Press Enter to open your workspace." : "Standby access for your remote vessel workspace."}
             </p>
           </section>
 
           <footer className="flex justify-center sm:justify-end">
             <div className="flex justify-end gap-3">
-              {hasAdmin ? "" :
+              {sessionError && <p role="alert" className="self-center text-red-200">{sessionError}</p>}
+              {hasAdmin || sessionStatus !== "anonymous" ? "" :
                 <Link
                   href="/setup"
                   className="flex items-center gap-2 rounded-xl border border-red-500 bg-red-300/10 px-5 py-3 font-medium text-red-200 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-700/30 hover:text-white hover:shadow-cyan-500/20"
@@ -332,12 +402,14 @@ export default function LockScreenPage() {
                 </Link>}
               <button
                 onClick={() => {
-                  setLoginOpen(true);
+                  if (sessionStatus === "authenticated") void logout();
+                  else setLoginOpen(true);
                 }}
+                disabled={sessionStatus === "checking" || loggingOut}
                 className="flex items-center gap-2 rounded-4xl border border-white/30 bg-white/20 px-5 py-3 font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/30 hover:shadow-cyan-500/20"
               >
                 <i className="fa-solid fa-right-to-bracket"></i>
-                Login
+                {sessionStatus === "checking" ? "Checking session…" : loggingOut ? "Logging out…" : sessionStatus === "authenticated" ? "Logout" : "Login"}
               </button>
             </div>
           </footer>
