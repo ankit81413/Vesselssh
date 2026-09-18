@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+* {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+input,
+textarea,
+[contenteditable]:not([contenteditable="false"]),
+[contenteditable]:not([contenteditable="false"]) * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 button{
   cursor: pointer;
 }
