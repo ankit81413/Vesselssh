@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AppWindow from "./components/main/AppWindow";
+import { Terminal } from '@xterm/xterm';
+import '@xterm/xterm/css/xterm.css';
+import { isNull } from "util";
 
 export default function Home() {
   const [youtubeOpen, setYoutubeOpen] = useState(true);
 
-  useEffect(()=>{
-    console.log("rerendered")
-  },[])
   return (
     <main className="relative min-h-screen w-full overflow-hidden text-white">
       <section className="flex min-h-screen flex-col">
@@ -18,6 +18,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+
       {youtubeOpen && (
         <AppWindow
           title="VS Code"

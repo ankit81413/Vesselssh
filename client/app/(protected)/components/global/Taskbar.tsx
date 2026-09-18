@@ -49,7 +49,7 @@ export default function Taskbar({ currentTime }: TaskbarProps) {
 
   return (
     <footer className="absolute inset-x-0 bottom-0 z-20">
-      <div className="flex h-12 w-full items-center justify-between border-t border-cyan-100/18 bg-slate-950/46 px-3 text-cyan-50 shadow-[0_-14px_42px_rgba(2,8,23,0.36)] backdrop-blur-2xl sm:px-5">
+      <div className="flex h-12 w-full items-center justify-between border-t border-cyan-100/18 bg-slate-950/46 px-3 text-cyan-50 shadow-[0_-14px_42px_rgba(2,8,23,0.36)] sm:px-5">
         <button
           title="Vessel Launcher"
           aria-label="Open Vessel launcher"

@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import wallpaper from "@/app/(protected)/assets/lockscreenWallpaper.jpg";
 import desktopWallpaper from "@/app/(protected)/assets/HomeWallpaper.jpg";
+import logo from "@/public/logo.svg"
 import dp from "@/app/(protected)/assets/dp.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -363,9 +364,8 @@ export default function LockScreenPage() {
             }`}
         >
           <header className="flex items-center justify-between text-sm text-white/80">
-            <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/15 px-3 py-2 backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.9)]" />
-              <span className="font-medium tracking-wide">Vessel SSH</span>
+            <div className="flex items-center gap-2 rounded-full px-3 py-2">
+              <Image alt="Vessel SSH" src={logo} width={50} ></Image>
             </div>
           </header>
 
