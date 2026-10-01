@@ -8,8 +8,20 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@cmd/*": ["cmd/*"]
+    }
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+
+  "include": [
+    "**/*.ts",
+    "cmd/**/*.ts"
+  ],
+
+  "exclude": [
+    "node_modules"
+  ]
 }

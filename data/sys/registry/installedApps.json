@@ -1,0 +1,7 @@
+{
+    "Terminal":{
+        "appId" : 1,
+        "name": "Terminal",
+        "start" : "cmd/trm/terminal.ts"
+    }
+}

@@ -1,21 +1,28 @@
-"use client"
-
 import type { ReactNode } from "react";
 import DesktopLayout from "@/app/(protected)/components/DesktopLayout";
-import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-type ProtectedLayoutProps = {
+export default async function ProtectedLayout({
+  children,
+}: {
   children: ReactNode;
-};
+}) {
+  const headerList = await headers();
+  const pathname = headerList.get("x-pathname");
 
-export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
+  if (!pathname) {
+    redirect("/");
+  }
 
-  const pathname = usePathname()
-  const path = pathname.toLowerCase().split("/");
-  console.log(path);
-  
-  if (path.includes("app")){
-    return children
+  const except = ["app", "PreinstalledApps"];
+
+  const path = pathname.split("/").filter(Boolean);
+
+  const isExcepted = path.some((segment) => except.includes(segment));
+
+  if (isExcepted) {
+    return <>{children}</>;
   }
 
   return <DesktopLayout>{children}</DesktopLayout>;

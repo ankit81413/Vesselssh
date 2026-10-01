@@ -18,7 +18,11 @@ export async function setupMiddleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    return NextResponse.next();
+    return NextResponse.next({
+      request : {
+        headers : req.headers
+      }
+    });
   } catch {
     return new NextResponse("Unable to check setup status. Please try again shortly.", {
       status: 503,

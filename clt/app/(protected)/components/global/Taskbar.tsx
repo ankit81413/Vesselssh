@@ -1,6 +1,7 @@
 import { useFullscreen } from "@/app/(protected)/hooks/useFullscreen";
 import Image from "next/image";
 import TaskbarClock from "./TaskbarClock";
+import { memo } from "react";
 
 type TaskbarProps = {
   currentTime: Date | null;
@@ -44,7 +45,7 @@ const taskbarApps = [
   },
 ];
 
-export default function Taskbar({ currentTime }: TaskbarProps) {
+function Taskbar({ currentTime }: TaskbarProps) {
   const { enterFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
 
   return (
@@ -71,21 +72,19 @@ export default function Taskbar({ currentTime }: TaskbarProps) {
               title={item.label}
               aria-label={item.label}
               aria-current={item.isFocused ? "page" : undefined}
-              className={`group relative grid h-8 w-8 place-items-center rounded-md transition hover:bg-cyan-100/12 focus:outline-none focus:ring-2 focus:ring-cyan-200/55 ${
-                item.isFocused
+              className={`group relative grid h-8 w-8 place-items-center rounded-md transition hover:bg-cyan-100/12 focus:outline-none focus:ring-2 focus:ring-cyan-200/55 ${item.isFocused
                   ? "bg-cyan-100/14 shadow-sm shadow-cyan-950/20"
                   : "bg-transparent"
-              }`}
+                }`}
             >
               <i className={`fa-solid ${item.icon} ${item.tone} text-[13px]`} />
               <span
-                className={`absolute bottom-0.5 h-0.5 rounded-full bg-cyan-200 transition-all ${
-                  item.isFocused
+                className={`absolute bottom-0.5 h-0.5 rounded-full bg-cyan-200 transition-all ${item.isFocused
                     ? "w-4 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
                     : item.isActive
-                    ? "w-2 opacity-80"
-                    : "w-1 opacity-0 group-hover:opacity-60"
-                }`}
+                      ? "w-2 opacity-80"
+                      : "w-1 opacity-0 group-hover:opacity-60"
+                  }`}
               />
             </button>
           ))}
@@ -126,3 +125,6 @@ export default function Taskbar({ currentTime }: TaskbarProps) {
     </footer>
   );
 }
+
+
+export default memo(Taskbar)

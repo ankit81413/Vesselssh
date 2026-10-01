@@ -1,27 +1,30 @@
 "use client";
 import useClickOutside from "@/app/(protected)/hooks/useClickOutside";
+import useAlert, { type AlertOptions } from "@/app/(protected)/hooks/useAlert";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useRef, useState } from "react";
 
-type alertType = {
-  title: string;
-  heading: string;
-  text: string;
-  albuttons: Array<string>;
-  okAction?: () => void;
-};
-
-const alertDict: Record<string, alertType> = {
+const alertDict: Record<string, AlertOptions> = {
   "route-not-found": {
     title: "Route not found ${alertTitle}",
     heading: "Route not found",
     text: "The page you are looking for could not be found.",
     albuttons: [],
   },
+  "500": {
+    title: "500 - Server Side Error",
+    heading: "Server Side Error",
+    text: "There is some error on the ServerSide. Contact youe Administrator",
+    albuttons: ["ok"],
+    okAction() {
+      window.location.href = "https://github.com/ankit81413/Vesselssh"
+    }
+  },
 };
 
 export default function Alert() {
   const searchParam = useSearchParams();
+  const { alert: customAlert, closeAlert: closeCustomAlert } = useAlert();
 
   const [dismissedAlertKey, setDismissedAlertKey] = useState<string | null>(null);
   const [isBlinking, setIsBlinking] = useState(false);
@@ -32,7 +35,7 @@ export default function Alert() {
   const alroute = searchParam.get("alroute");
   const alertKey = alert ? `${alert}:${alroute ?? ""}` : null;
 
-  const alertToShow = useMemo(() => {
+  const routeAlert = useMemo(() => {
     if (!alert || !alertDict[alert]) {
       return null;
     }
@@ -48,21 +51,26 @@ export default function Alert() {
     };
   }, [alert, alroute]);
 
-  const showalert = Boolean(alertToShow && alertKey !== dismissedAlertKey);
+  const alertToShow = customAlert ?? (alertKey !== dismissedAlertKey ? routeAlert : null);
+  const showalert = Boolean(alertToShow);
 
   const closeAlert = useCallback(() => {
+    if (customAlert) {
+      closeCustomAlert();
+      return;
+    }
     if (alertKey) {
       setDismissedAlertKey(alertKey);
     }
-    window.history.replaceState({}, "", window.location.pathname);
-  }, [alertKey]);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("alert");
+    url.searchParams.delete("alroute");
+    window.history.replaceState(window.history.state, "", url);
+  }, [alertKey, customAlert, closeCustomAlert]);
 
-  const handheOk = () => {
-    if (alertToShow?.okAction) {
-      alertToShow.okAction();
-    } else {
-      closeAlert();
-    }
+  const handleOk = () => {
+    closeAlert();
+    alertToShow?.okAction?.();
   };
 
   const blinkAlert = useCallback(() => {
@@ -156,8 +164,8 @@ export default function Alert() {
             </div>
 
             <div className="flex justify-end gap-2 rounded-b-xl border-t border-gray-200 bg-gray-50 px-5 py-3">
-              {alertToShow?.albuttons.includes("cancel") && (
-                <button className="rounded-md border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
+              {alertToShow?.albuttons?.includes("cancel") && (
+                <button onClick={closeAlert} className="rounded-md border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
                   Cancel
                 </button>
               )}
@@ -165,7 +173,7 @@ export default function Alert() {
               <button
                 className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
                 onClick={() => {
-                  handheOk();
+                  handleOk();
                 }}
               >
                 OK

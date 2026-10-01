@@ -1,18 +1,27 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { sessionMiddleware } from "./middleware/session";
 import { setupMiddleware } from "./middleware/setup";
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname === "/setup" || pathname.startsWith("/setup/")) {
-    return setupMiddleware(req);
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-pathname", pathname);
+  const request = new NextRequest(req, {
+    headers: requestHeaders,
+  });
+  
+  if (pathname === "/login" || pathname.startsWith("/login/")) {
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
-  return sessionMiddleware(req);
+  if (pathname === "/setup" || pathname.startsWith("/setup/")) {
+    return setupMiddleware(request);
+  }
+
+  return sessionMiddleware(request);
 }
 
 export const config = {
-  matcher: ["/", "/setup/:path*", "/App/:path*", "/app/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon\\.ico$).*)"],
 };

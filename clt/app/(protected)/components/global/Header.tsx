@@ -1,8 +1,9 @@
 import Image from "next/image";
 import TerminalDock from "./TerminalDock";
+import { memo } from "react";
 
 
-export default function Header() {
+function Header() {
   return (
     <>
 
@@ -28,3 +29,6 @@ export default function Header() {
     </>
   );
 }
+
+
+export default memo(Header)

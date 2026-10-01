@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 
-export default function page() {
+export default function TerminalApp() {
     const terminalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
