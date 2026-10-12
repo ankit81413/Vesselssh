@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import type { PointerEvent, ReactNode } from "react";
-import { useAppStore } from "../../store/appStore";
+import { AppInstance, useAppStore } from "../../store/appStore";
 
 type ResizeGeometry = { width: number; height: number; x: number; y: number };
 
@@ -13,8 +13,11 @@ type AppWindowProps = {
   icon?: ReactNode;
   id : string,
   beforeClose: () => void;
+  onResize?: (size: { width: number; height: number }) => void;
   initialWidth?: number;
   initialHeight?: number;
+  initialPosition?: { x: number; y: number };
+  data : AppInstance;
 };
 
 const controlClass =
@@ -43,18 +46,26 @@ export default function AppWindow({
   icon,
   id,
   beforeClose,
+  onResize,
   initialWidth = 860,
   initialHeight = 540,
+  initialPosition = { x: 0, y: 0 },
+  data
 }: AppWindowProps) {
   const titleId = useId();
   const frame = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  const lastContentSize = useRef<{ width: number; height: number } | null>(null);
   const removeApp = useAppStore((s)=>s.removeApp)
+  const isMinimized = useAppStore((s) => s.apps.find((app) => app.id === id)?.isMinimized ?? false);
+  const isFocused = useAppStore((s) => s.focusedAppId === id);
+  const minimizeApp = useAppStore((s) => s.minimizeApp);
+  const restoreApp = useAppStore((s) => s.restoreApp);
 
   const closeApp = ()=>{
     beforeClose()
     removeApp(id)
-  }
-
+  } 
 
   const drag = useRef<{
     pointerId: number;
@@ -63,7 +74,7 @@ export default function AppWindow({
     left: number;
     top: number;
   } | null>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState(initialPosition);
   const [maximized, setMaximized] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [noDrag, setNoDrag] = useState(false)
@@ -93,6 +104,24 @@ export default function AppWindow({
   }, []);
 
   const showLightPreview = dragging || resizeX || resizeY;
+  useEffect(() => {
+    const element = content.current;
+    if (!element || !onResize) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
+      if (width <= 0 || height <= 0) return;
+      const previous = lastContentSize.current;
+      if (previous?.width === width && previous.height === height) return;
+      lastContentSize.current = { width, height };
+      onResize({ width, height });
+    });
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [onResize]);
+
   // Window resize safty function
   useEffect(() => {
     const keepVisible = () => {
@@ -289,7 +318,12 @@ export default function AppWindow({
   return (
     <>
       {/* Light Preview */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 bottom-12 z-30 flex items-center justify-center">
+      <div
+        className={`pointer-events-none fixed inset-x-0 top-0 bottom-12 items-center justify-center ${data.isMinimized?"hidden" : "flex"}`}
+        style={{ display: isMinimized ? "none" : undefined, zIndex: isFocused ? 40 : 30 }}
+        onPointerDownCapture={() => restoreApp(id)}
+        onFocusCapture={() => restoreApp(id)}
+      >
         <div className={`appWindowMoveBorder absolute pointer-events-none flex-col justify-center items-center overflow-hidden  text-white ${maximized ? "absolute top-0 h-full w-full rounded-none" : "rounded-xl shadow-sm"} border border-dashed border-2 bg-black/90 ${showLightPreview ? "flex" : "hidden"}`}
           style={
             maximized
@@ -317,7 +351,7 @@ export default function AppWindow({
         </div>
       </div>
 
-      <div className="pointer-events-none fixed inset-x-0 top-0 bottom-12 z-30 flex items-center justify-center">
+      <div className={`pointer-events-none fixed inset-x-0 top-0 bottom-12 z-30 items-center justify-center ${data.isMinimized?"hidden":"flex"}`}>
         {/* Resizers */}
         <div aria-hidden="true" className={`appWindowResizers pointer-events-none absolute z-10 ${maximized ? "hidden" : "flex flex-col"}`}
           style={
@@ -452,9 +486,9 @@ export default function AppWindow({
                 <span className="mx-1 h-4 w-px bg-white/10" />
                 <button
                   type="button"
-                  disabled
-                  aria-label="Minimize (coming soon)"
-                  title="Minimize (coming soon)"
+                  onClick={() => minimizeApp(id)}
+                  aria-label={`Minimize ${title}`}
+                  title="Minimize"
                   className={controlClass}
                 >
                   <i aria-hidden="true" className="fa-solid fa-minus text-xs" />
@@ -483,7 +517,7 @@ export default function AppWindow({
                 </button>
               </div>
             </header>
-            <div className="relative min-h-0 flex-1 bg-black">
+            <div ref={content} className="relative min-h-0 flex-1 bg-black">
               <iframe
                 key={src}
                 src={src}

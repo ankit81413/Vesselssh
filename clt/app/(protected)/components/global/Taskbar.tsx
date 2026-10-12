@@ -14,12 +14,14 @@ type TaskbarProps = {
 function Taskbar({ currentTime }: TaskbarProps) {
   const { enterFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
   const apps = useAppStore((s) => s.apps);
+  const focusedInstanceId = useAppStore((s) => s.focusedAppId);
+  const restoreApp = useAppStore((s) => s.restoreApp);
   const taskbarApps = useTaskbarAppStore((s) => s.taskbarApps);
 
   useEffect(() => {
     const runningApps = apps.filter((app) => app.status === "running");
     const activeAppIds = new Set(runningApps.map((app) => app.appId));
-    const focusedAppId = runningApps[runningApps.length - 1]?.appId;
+    const focusedAppId = runningApps.find((app) => app.id === focusedInstanceId && !app.isMinimized)?.appId;
 
     useTaskbarAppStore.setState((state) => {
       const taskbarApps = state.taskbarApps.map((app) => {
@@ -35,7 +37,7 @@ function Taskbar({ currentTime }: TaskbarProps) {
         ? state
         : { taskbarApps };
     });
-  }, [apps]);
+  }, [apps, focusedInstanceId]);
   
 
   return (
@@ -62,6 +64,13 @@ function Taskbar({ currentTime }: TaskbarProps) {
               title={item.label}
               aria-label={item.label}
               aria-current={item.isFocused ? "page" : undefined}
+              onClick={() => {
+                const instances = apps.filter((app) => app.appId === item.appId && app.status === "running");
+                const target = instances.find((app) => app.isMinimized)
+                  ?? instances.find((app) => app.id === focusedInstanceId)
+                  ?? instances[instances.length - 1];
+                if (target) restoreApp(target.id);
+              }}
               className={`group relative grid h-8 w-8 place-items-center rounded-md transition hover:bg-cyan-100/12 focus:outline-none focus:ring-2 focus:ring-cyan-200/55 ${item.isFocused
                 ? "bg-cyan-100/14 shadow-sm shadow-cyan-950/20"
                 : "bg-transparent"

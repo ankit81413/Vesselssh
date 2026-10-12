@@ -13,8 +13,8 @@ export default async function AppPage({ params }: {
 
 
     return (
-        <div>
-            <iframe src={clt_url} className="h-150 w-full"></iframe>
+        <div className="h-dvh w-full overflow-hidden">
+            <iframe src={clt_url} title={appid} className="block h-full w-full border-0"></iframe>
         </div>
     )
 }

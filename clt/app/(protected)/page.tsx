@@ -13,7 +13,7 @@ export default function Home() {
     addApp({
       id: crypto.randomUUID(),
       appId: appId,
-      name: "Terminal",
+      name: name,
       status: "running",
       icon : icon
     });
@@ -24,7 +24,7 @@ export default function Home() {
       Appid: "Terminal",
       name: "Terminal",
       icon: "fa-solid fa-terminal",
-      color: "text-green-400"
+      color: "text-green-400",
     }
   ];
 
@@ -58,6 +58,9 @@ export default function Home() {
         <AppWindow
           key={app.id}
           id={app.id}
+          initialWidth={app.initialBounds?.width}
+          initialHeight={app.initialBounds?.height}
+          initialPosition={app.initialBounds}
           title={app.name}
           src={`http://localhost:48283/app/${app.appId}`}
           icon={
@@ -69,22 +72,10 @@ export default function Home() {
           beforeClose={() => {
             console.log("Apps External function closed");
           }}
+          data = {app}
         />
       ))}
 
-      {/* {youtubeOpen && (
-        <AppWindow
-          title="VS Code"
-          src="http://localhost:48283/app/Terminal"
-          icon={
-            <i
-              aria-hidden="true"
-              className="fa-solid fa-play text-red-400 w-2 h-2 text-[10px]"
-            />
-          }
-          onClose={() => setYoutubeOpen(false)}
-        />
-      )} */}
     </main>
   );
 }

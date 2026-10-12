@@ -2,13 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
+import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 
 export default function TerminalApp() {
   const terminalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!terminalRef.current) return;
+    const container = terminalRef.current;
+    if (!container) return;
 
     const terminal = new Terminal({
       cursorBlink: true,
@@ -20,10 +22,40 @@ export default function TerminalApp() {
       },
     });
 
-    terminal.open(terminalRef.current);
+    const fitAddon = new FitAddon();
+    terminal.loadAddon(fitAddon);
+    terminal.open(container);
     terminal.focus();
 
     const ws = new WebSocket("ws://localhost:4000/terminal");
+    let resizeFrame: number | null = null;
+    let disposed = false;
+    let lastSize = "";
+
+    const fitTerminal = () => {
+      if (disposed || container.clientWidth <= 0 || container.clientHeight <= 0) return;
+      fitAddon.fit();
+      const { cols, rows } = terminal;
+      const size = `${cols}:${rows}`;
+      if (ws.readyState === WebSocket.OPEN && size !== lastSize) {
+        ws.send(JSON.stringify({ type: "resize", cols, rows }));
+        lastSize = size;
+      }
+    };
+
+    const scheduleFit = () => {
+      if (disposed || resizeFrame !== null) return;
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = null;
+        fitTerminal();
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(scheduleFit);
+    resizeObserver.observe(container);
+    window.addEventListener("resize", scheduleFit);
+    void document.fonts.ready.then(scheduleFit);
+    scheduleFit();
 
     // Backend → xterm
     ws.onmessage = (event) => {
@@ -47,6 +79,7 @@ export default function TerminalApp() {
     });
 
     ws.onopen = () => {
+      fitTerminal();
       console.log("Terminal connected");
     };
 
@@ -59,6 +92,10 @@ export default function TerminalApp() {
     };
 
     return () => {
+      disposed = true;
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", scheduleFit);
+      if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
       inputDisposable.dispose();
       ws.close();
       terminal.dispose();
