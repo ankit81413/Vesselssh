@@ -4,6 +4,7 @@ type AppInstance = {
   id: string;
   appId: string;
   name: string;
+  icon: string
   status: "running" | "stopped" | "error";
 };
 
@@ -21,10 +22,11 @@ type AppState = {
 export const useAppStore = create<AppState>((set) => ({
   apps: [],
 
-  addApp: (app) =>
+  addApp: (app) => {
     set((state) => ({
       apps: [...state.apps, app],
-    })),
+    }))
+  },
 
   removeApp: (id) =>
     set((state) => ({

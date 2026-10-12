@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import type { PointerEvent, ReactNode } from "react";
+import { useAppStore } from "../../store/appStore";
 
 type ResizeGeometry = { width: number; height: number; x: number; y: number };
 
@@ -10,7 +11,8 @@ type AppWindowProps = {
   title: string;
   src: string;
   icon?: ReactNode;
-  onClose: () => void;
+  id : string,
+  beforeClose: () => void;
   initialWidth?: number;
   initialHeight?: number;
 };
@@ -39,12 +41,21 @@ export default function AppWindow({
   title,
   src,
   icon,
-  onClose,
+  id,
+  beforeClose,
   initialWidth = 860,
   initialHeight = 540,
 }: AppWindowProps) {
   const titleId = useId();
   const frame = useRef<HTMLDivElement>(null);
+  const removeApp = useAppStore((s)=>s.removeApp)
+
+  const closeApp = ()=>{
+    beforeClose()
+    removeApp(id)
+  }
+
+
   const drag = useRef<{
     pointerId: number;
     x: number;
@@ -463,7 +474,7 @@ export default function AppWindow({
                 </button>
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={closeApp}
                   aria-label={`Close ${title}`}
                   title="Close"
                   className={`${controlClass} hover:bg-red-500/80`}

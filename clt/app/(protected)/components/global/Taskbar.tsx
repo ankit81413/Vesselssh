@@ -1,52 +1,42 @@
 import { useFullscreen } from "@/app/(protected)/hooks/useFullscreen";
 import Image from "next/image";
 import TaskbarClock from "./TaskbarClock";
-import { memo } from "react";
+import { memo, useEffect } from "react";
+import { useAppStore } from "../../store/appStore";
+import { useTaskbarAppStore } from "../../store/taskBarApps";
 
 type TaskbarProps = {
   currentTime: Date | null;
 };
 
-const taskbarApps = [
-  {
-    label: "Terminal",
-    icon: "fa-terminal",
-    isActive: true,
-    isFocused: true,
-    tone: "text-emerald-200",
-  },
-  {
-    label: "Files",
-    icon: "fa-folder-open",
-    isActive: true,
-    isFocused: false,
-    tone: "text-sky-100",
-  },
-  {
-    label: "Browser",
-    icon: "fa-globe",
-    isActive: false,
-    isFocused: false,
-    tone: "text-cyan-100",
-  },
-  {
-    label: "Monitor",
-    icon: "fa-chart-simple",
-    isActive: false,
-    isFocused: false,
-    tone: "text-cyan-200",
-  },
-  {
-    label: "Settings",
-    icon: "fa-gear",
-    isActive: false,
-    isFocused: false,
-    tone: "text-zinc-100",
-  },
-];
+
 
 function Taskbar({ currentTime }: TaskbarProps) {
   const { enterFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
+  const apps = useAppStore((s) => s.apps);
+  const taskbarApps = useTaskbarAppStore((s) => s.taskbarApps);
+
+  useEffect(() => {
+    const runningApps = apps.filter((app) => app.status === "running");
+    const activeAppIds = new Set(runningApps.map((app) => app.appId));
+    const focusedAppId = runningApps[runningApps.length - 1]?.appId;
+
+    useTaskbarAppStore.setState((state) => {
+      const taskbarApps = state.taskbarApps.map((app) => {
+        const isActive = activeAppIds.has(app.appId);
+        const isFocused = app.appId === focusedAppId;
+
+        return app.isActive === isActive && app.isFocused === isFocused
+          ? app
+          : { ...app, isActive, isFocused };
+      });
+
+      return taskbarApps.every((app, index) => app === state.taskbarApps[index])
+        ? state
+        : { taskbarApps };
+    });
+  }, [apps]);
+  
 
   return (
     <footer className="absolute inset-x-0 bottom-0 z-20">
@@ -73,17 +63,17 @@ function Taskbar({ currentTime }: TaskbarProps) {
               aria-label={item.label}
               aria-current={item.isFocused ? "page" : undefined}
               className={`group relative grid h-8 w-8 place-items-center rounded-md transition hover:bg-cyan-100/12 focus:outline-none focus:ring-2 focus:ring-cyan-200/55 ${item.isFocused
-                  ? "bg-cyan-100/14 shadow-sm shadow-cyan-950/20"
-                  : "bg-transparent"
+                ? "bg-cyan-100/14 shadow-sm shadow-cyan-950/20"
+                : "bg-transparent"
                 }`}
             >
               <i className={`fa-solid ${item.icon} ${item.tone} text-[13px]`} />
               <span
                 className={`absolute bottom-0.5 h-0.5 rounded-full bg-cyan-200 transition-all ${item.isFocused
-                    ? "w-4 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
-                    : item.isActive
-                      ? "w-2 opacity-80"
-                      : "w-1 opacity-0 group-hover:opacity-60"
+                  ? "w-4 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
+                  : item.isActive
+                    ? "w-2 opacity-80"
+                    : "w-1 opacity-0 group-hover:opacity-60"
                   }`}
               />
             </button>
