@@ -18,7 +18,7 @@ app.use(
 );
 
 app.get("/",(req,res)=>{
-    res.send("Server is working")
+    res.send("Vessel Going with the flow")
 })
 
 app.use("/api",routes)

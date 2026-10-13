@@ -1,7 +1,12 @@
 {
-    "Terminal":{
-        "appId" : 1,
+    "Terminal": {
+        "appId": 1,
         "name": "Terminal",
-        "start" : "cmd/trm/terminal.ts"
+        "start": "srv/cmd/trm/terminal.ts"
+    },
+    "CodeServer": {
+        "appId": 2,
+        "name": "Code Server",
+        "start": "apps/codeserver/start.ts"
     }
 }

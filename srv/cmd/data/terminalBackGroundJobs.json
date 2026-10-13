@@ -1,0 +1,350 @@
+[
+  {
+    "id": "a73e4e2f-37ad-4b2a-ac88-af6288c57e49",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 328312,
+    "status": "error",
+    "startedAt": 1791924371724,
+    "logs": [
+      "[2026-10-13T20:46:12.628Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T20:46:12.629Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T20:46:12.647Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T20:46:12.647Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T20:46:12.648Z] info    - Authentication is enabled",
+      "[2026-10-13T20:46:12.648Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T20:46:12.648Z] info    - Not serving HTTPS",
+      "[2026-10-13T20:46:12.648Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "ba8bcb2f-38a7-449a-a339-70579e527a9a",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 329375,
+    "status": "error",
+    "startedAt": 1791924472657,
+    "logs": [
+      "[2026-10-13T20:47:53.415Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T20:47:53.417Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T20:47:53.444Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T20:47:53.444Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T20:47:53.445Z] info    - Authentication is enabled",
+      "[2026-10-13T20:47:53.445Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T20:47:53.445Z] info    - Not serving HTTPS",
+      "[2026-10-13T20:47:53.445Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "91531d1a-34f7-491c-99f2-b8eabc2f5ea3",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 332590,
+    "status": "exited",
+    "startedAt": 1791924923418,
+    "logs": [
+      "[2026-10-13T20:55:23.881Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T20:55:23.882Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T20:55:23.889Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791924923907
+  },
+  {
+    "id": "18580591-19f7-405a-8678-b59fc74243bf",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 335205,
+    "status": "exited",
+    "startedAt": 1791925303258,
+    "logs": [
+      "[2026-10-13T21:01:43.745Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:01:43.746Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:01:43.753Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791925303770
+  },
+  {
+    "id": "855bae9a-dd09-4bef-b874-57c5b4fd76df",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 335434,
+    "status": "exited",
+    "startedAt": 1791925315483,
+    "logs": [
+      "[2026-10-13T21:01:56.230Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:01:56.231Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:01:56.242Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791925316266
+  },
+  {
+    "id": "76cc46da-ae02-4d89-a6ce-7781e5494ab1",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 335947,
+    "status": "exited",
+    "startedAt": 1791925377791,
+    "logs": [
+      "[2026-10-13T21:02:58.237Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:02:58.238Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:02:58.245Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791925378264
+  },
+  {
+    "id": "575a0a2d-34ba-4368-80cf-918593f4950a",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 337713,
+    "status": "error",
+    "startedAt": 1791925598742,
+    "logs": [
+      "[2026-10-13T21:06:39.155Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:06:39.156Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:06:39.168Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:06:39.169Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:06:39.169Z] info    - Authentication is enabled",
+      "[2026-10-13T21:06:39.169Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:06:39.169Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:06:39.169Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "640cefcd-8580-4a50-afbb-8eff6b944745",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 338391,
+    "status": "error",
+    "startedAt": 1791925656608,
+    "logs": [
+      "[2026-10-13T21:07:37.015Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:07:37.016Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:07:37.027Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:07:37.027Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:07:37.027Z] info    - Authentication is enabled",
+      "[2026-10-13T21:07:37.027Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:07:37.027Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:07:37.027Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "[02:37:46] ",
+      "[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)",
+      "[02:37:46] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-9d0b0568-a8e7-48c0-95df-fbb816c475de.sock)",
+      "[02:37:46] Extension host agent started.",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "ab08931f-f8eb-4881-b47a-2f4d9f49db5c",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 338917,
+    "status": "error",
+    "startedAt": 1791925698715,
+    "logs": [
+      "[2026-10-13T21:08:19.120Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:08:19.122Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:08:19.133Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:08:19.133Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:08:19.133Z] info    - Authentication is enabled",
+      "[2026-10-13T21:08:19.133Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:08:19.133Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:08:19.133Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "[02:38:39] ",
+      "[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)",
+      "[02:38:39] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-ef46b380-fdb2-4c74-8fd6-dfbe41a2c32f.sock)",
+      "[02:38:39] Extension host agent started.",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "3d8c9ab2-7e6f-4d25-b429-fdfd20b8c107",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 346191,
+    "status": "exited",
+    "startedAt": 1791926182688,
+    "logs": [
+      "[2026-10-13T21:16:23.059Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:16:23.060Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:16:23.067Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791926183085
+  },
+  {
+    "id": "2b6b74c3-80e2-4c45-8ff9-4880768c3457",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 346529,
+    "status": "error",
+    "startedAt": 1791926205894,
+    "logs": [
+      "[2026-10-13T21:16:46.307Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:16:46.308Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:16:46.319Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:16:46.319Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:16:46.319Z] info    - Authentication is enabled",
+      "[2026-10-13T21:16:46.319Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:16:46.319Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:16:46.319Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "[02:48:55] ",
+      "[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)",
+      "[02:48:55] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-e4ef7a38-4037-4cdc-93f1-7af05e42ca72.sock)",
+      "[02:48:55] Extension host agent started.",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "15f486d0-999a-4e4f-8b7f-b1959ec49b21",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 347811,
+    "status": "exited",
+    "startedAt": 1791926335230,
+    "logs": [
+      "[2026-10-13T21:18:55.643Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:18:55.644Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:18:55.651Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791926335669
+  },
+  {
+    "id": "86edf847-36aa-4eb4-87ba-f556383ee93b",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 349987,
+    "status": "error",
+    "startedAt": 1791926527300,
+    "logs": [
+      "[2026-10-13T21:22:07.775Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:22:07.777Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:22:07.791Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:22:07.791Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:22:07.791Z] info    - Authentication is enabled",
+      "[2026-10-13T21:22:07.791Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:22:07.791Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:22:07.791Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "[02:52:14] ",
+      "[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)",
+      "[02:52:14] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-6dfeed60-68f3-4dba-9fbe-5c4695905d0f.sock)",
+      "[02:52:14] Extension host agent started.",
+      "Backend restarted; process control was lost. The process may still be running."
+    ]
+  },
+  {
+    "id": "52b30155-e01d-436a-b4ef-06fc191f9b41",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 350174,
+    "status": "exited",
+    "startedAt": 1791926534081,
+    "logs": [
+      "[2026-10-13T21:22:14.690Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:22:14.691Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:22:14.702Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791926534725
+  },
+  {
+    "id": "da2e9d38-f8f6-4ce8-bb6c-edcdf8990b16",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 351482,
+    "status": "exited",
+    "startedAt": 1791926659959,
+    "logs": [
+      "[2026-10-13T21:24:20.403Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:24:20.404Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:24:20.416Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:24:20.416Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:24:20.416Z] info    - Authentication is enabled",
+      "[2026-10-13T21:24:20.416Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:24:20.416Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:24:20.416Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "[02:54:36] ",
+      "[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)",
+      "[02:54:36] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-238ad9ac-2292-49c4-8a1b-14a5afd59e17.sock)",
+      "[02:54:36] Extension host agent started."
+    ],
+    "exitCode": 0,
+    "endedAt": 1791926774298
+  },
+  {
+    "id": "d2fdbca7-f58f-4a00-89d9-da03a7bf5768",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 351751,
+    "status": "exited",
+    "startedAt": 1791926676496,
+    "logs": [
+      "[2026-10-13T21:24:37.070Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:24:37.071Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:24:37.079Z] error listen EADDRINUSE: address already in use 127.0.0.1:8080"
+    ],
+    "exitCode": 1,
+    "endedAt": 1791926677102
+  },
+  {
+    "id": "8858a61e-d4ac-4d61-b321-eec05bfb9342",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 352664,
+    "status": "exited",
+    "startedAt": 1791926779879,
+    "logs": [
+      "[2026-10-13T21:26:20.318Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:26:20.319Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:26:20.330Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:26:20.330Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:26:20.330Z] info    - Authentication is enabled",
+      "[2026-10-13T21:26:20.330Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:26:20.330Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:26:20.330Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock"
+    ],
+    "exitCode": 0,
+    "endedAt": 1791927124859
+  },
+  {
+    "id": "d9178144-1465-4c6d-9633-42657fc92b89",
+    "ownerApp": "CodeServer",
+    "command": "code-server",
+    "pid": 355017,
+    "status": "running",
+    "startedAt": 1791927137924,
+    "logs": [
+      "[2026-10-13T21:32:18.725Z] info  code-server 4.137.0 b11dabdaca0d3369986975be285db92c8795cea5",
+      "[2026-10-13T21:32:18.726Z] info  Using user-data-dir /home/charlie/.local/share/code-server",
+      "[2026-10-13T21:32:18.754Z] info  Using config file /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:32:18.754Z] info  HTTP server listening on http://127.0.0.1:8080/",
+      "[2026-10-13T21:32:18.755Z] info    - Authentication is enabled",
+      "[2026-10-13T21:32:18.755Z] info      - Using password from /home/charlie/.config/code-server/config.yaml",
+      "[2026-10-13T21:32:18.755Z] info    - Not serving HTTPS",
+      "[2026-10-13T21:32:18.755Z] info  Session server listening on /home/charlie/.local/share/code-server/code-server-ipc.sock",
+      "[03:02:19] ",
+      "[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)",
+      "[03:02:19] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-b5de3fe6-83c4-48df-810a-91278a233a8b.sock)",
+      "[03:02:19] Extension host agent started.",
+      "File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm",
+      "[03:03:50] [127.0.0.1][308933a0][ManagementConnection] New connection established.",
+      "File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js",
+      "[03:03:51] [AgentHostChannel] Renderer ctx=[object Object] requested connect to upstream",
+      "[03:03:52] [127.0.0.1][2b21fa91][ExtensionHostConnection] New connection established.",
+      "[03:03:52] [127.0.0.1][2b21fa91][ExtensionHostConnection] Starting extension host process...",
+      "[03:03:53] [127.0.0.1][2b21fa91][ExtensionHostConnection] <356531> Launched Extension Host Process.",
+      "[03:03:53] [127.0.0.1][2b21fa91][ExtensionHostConnection] <356531> [reconnection-grace-time] Extension host: read VSCODE_RECONNECTION_GRACE_TIME=10800000ms (10800s)",
+      "[IPC Library: Agent Host] Agent host server listening on /tmp/vscode-ipc-b5de3fe6-83c4-48df-810a-91278a233a8b.sock",
+      "[03:03:54] ServerAgentHostManager: agent host started",
+      "[03:03:54] [AgentHostChannel] Opening upstream to /tmp/vscode-ipc-b5de3fe6-83c4-48df-810a-91278a233a8b.sock",
+      "[03:05:09] [127.0.0.1][308933a0][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.",
+      "[03:05:09] [127.0.0.1][2b21fa91][ExtensionHostConnection] <356531> Extension Host Process exited with code: 0, signal: null."
+    ]
+  }
+]

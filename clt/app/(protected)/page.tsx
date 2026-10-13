@@ -9,13 +9,13 @@ export default function Home() {
   const addApp = useAppStore((s) => s.addApp);
 
 
-  const openApp = (appId:string,name:string, icon: string) => {    
+  const openApp = (appId: string, name: string, icon: string) => {
     addApp({
       id: crypto.randomUUID(),
       appId: appId,
       name: name,
       status: "running",
-      icon : icon
+      icon: icon
     });
   };
 
@@ -25,6 +25,12 @@ export default function Home() {
       name: "Terminal",
       icon: "fa-solid fa-terminal",
       color: "text-green-400",
+    },
+    {
+      Appid: "CodeServer",
+      name: "Code Server",
+      icon: "fa-solid fa-terminal",
+      color: "text-red-400",
     }
   ];
 
@@ -37,7 +43,7 @@ export default function Home() {
               <button
                 key={app.Appid}
                 type="button"
-                onClick={() => openApp(app.Appid,app.name,app.icon)}
+                onClick={() => openApp(app.Appid, app.name, app.icon)}
                 className="group flex min-h-[76px] w-full flex-col items-center justify-center gap-2 rounded-lg p-2 text-center transition-colors hover:bg-white/10"
                 title={`Double-click to open ${app.name}`}
               >
@@ -72,9 +78,10 @@ export default function Home() {
           beforeClose={() => {
             console.log("Apps External function closed");
           }}
-          data = {app}
+          data={app}
         />
       ))}
+
 
     </main>
   );

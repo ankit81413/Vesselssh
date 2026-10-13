@@ -12,7 +12,7 @@ export async function start() {
         if (address && typeof address !== "string") {
             return {
                 status: "running",
-                clt_url:"/PreinstalledApps/Terminal",
+                clt_url: "/PreinstalledApps/Terminal",
                 url: `ws://localhost:${address.port}`
             };
         }
@@ -64,7 +64,7 @@ export async function start() {
 
     return {
         status: "running",
-        clt_url:"/PreinstalledApps/Terminal",
+        clt_url: "/PreinstalledApps/Terminal",
         url
     };
 }
@@ -74,11 +74,15 @@ export function createTerminal() {
         ? "powershell.exe"
         : "bash";
 
+    // Remove the backend's PORT variable from the user's shell environment
+    const terminalEnv = { ...process.env };
+    delete terminalEnv.PORT;
+
     return pty.spawn(shell, [], {
         name: "xterm-color",
         cols: 80,
         rows: 24,
         cwd: process.env.HOME || process.cwd(),
-        env: process.env as Record<string, string>,
+        env: terminalEnv as Record<string, string>,
     });
 }
