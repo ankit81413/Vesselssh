@@ -2,11 +2,13 @@
     "Terminal": {
         "appId": 1,
         "name": "Terminal",
-        "start": "srv/cmd/trm/terminal.ts"
+        "start": "srv/cmd/trm/terminal.ts",
+        "onclose":"srv/cmd/trm/terminalclose.ts"
     },
     "CodeServer": {
         "appId": 2,
         "name": "Code Server",
-        "start": "apps/codeserver/start.ts"
+        "start": "apps/codeserver/start.ts",
+        "onclose" : "apps/codeserver/onclose.ts"
     }
 }

@@ -11,13 +11,13 @@ type AppWindowProps = {
   title: string;
   src: string;
   icon?: ReactNode;
-  id : string,
+  id: string,
   beforeClose: () => void;
   onResize?: (size: { width: number; height: number }) => void;
   initialWidth?: number;
   initialHeight?: number;
   initialPosition?: { x: number; y: number };
-  data : AppInstance;
+  data: AppInstance;
 };
 
 const controlClass =
@@ -54,18 +54,27 @@ export default function AppWindow({
 }: AppWindowProps) {
   const titleId = useId();
   const frame = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null)
   const content = useRef<HTMLDivElement>(null);
   const lastContentSize = useRef<{ width: number; height: number } | null>(null);
-  const removeApp = useAppStore((s)=>s.removeApp)
+  const removeApp = useAppStore((s) => s.removeApp)
   const isMinimized = useAppStore((s) => s.apps.find((app) => app.id === id)?.isMinimized ?? false);
   const isFocused = useAppStore((s) => s.focusedAppId === id);
   const minimizeApp = useAppStore((s) => s.minimizeApp);
   const restoreApp = useAppStore((s) => s.restoreApp);
 
-  const closeApp = ()=>{
+
+  function postCloseMessage() {
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "CLOSE_APP" },"http://localhost:48283"
+    )
+  }
+
+  const handleClose = () => {
     beforeClose()
-    removeApp(id)
-  } 
+    postCloseMessage()
+    // removeApp(id)
+  }
 
   const drag = useRef<{
     pointerId: number;
@@ -172,6 +181,32 @@ export default function AppWindow({
     };
     setDragging(true);
   }
+
+
+  // Iframe Message Acknowledgement
+
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (event.origin !== "http://localhost:48283") return;
+      if (event.source !== iframeRef.current?.contentWindow) return;
+
+      if (event.data?.type === "APP_CLOSED") {
+        console.info(`Closing App with id : ${id}`)
+        removeApp(id)
+        
+      }
+
+      if (event.data?.type === "APP_CLOSE_FAILED") {
+        console.error("App cleanup failed; window remains open.");
+      }
+    }
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
 
   function moveDrag(event: PointerEvent<HTMLElement>) {
     const start = drag.current;
@@ -319,7 +354,7 @@ export default function AppWindow({
     <>
       {/* Light Preview */}
       <div
-        className={`pointer-events-none fixed inset-x-0 top-0 bottom-12 items-center justify-center ${data.isMinimized?"hidden" : "flex"}`}
+        className={`pointer-events-none fixed inset-x-0 top-0 bottom-12 items-center justify-center ${data.isMinimized ? "hidden" : "flex"}`}
         style={{ display: isMinimized ? "none" : undefined, zIndex: isFocused ? 40 : 30 }}
         onPointerDownCapture={() => restoreApp(id)}
         onFocusCapture={() => restoreApp(id)}
@@ -351,7 +386,7 @@ export default function AppWindow({
         </div>
       </div>
 
-      <div className={`pointer-events-none fixed inset-x-0 top-0 bottom-12 z-30 items-center justify-center ${data.isMinimized?"hidden":"flex"}`}>
+      <div className={`pointer-events-none fixed inset-x-0 top-0 bottom-12 z-30 items-center justify-center ${data.isMinimized ? "hidden" : "flex"}`}>
         {/* Resizers */}
         <div aria-hidden="true" className={`appWindowResizers pointer-events-none absolute z-10 ${maximized ? "hidden" : "flex flex-col"}`}
           style={
@@ -508,7 +543,7 @@ export default function AppWindow({
                 </button>
                 <button
                   type="button"
-                  onClick={closeApp}
+                  onClick={handleClose}
                   aria-label={`Close ${title}`}
                   title="Close"
                   className={`${controlClass} hover:bg-red-500/80`}
@@ -519,6 +554,7 @@ export default function AppWindow({
             </header>
             <div ref={content} className="relative min-h-0 flex-1 bg-black">
               <iframe
+                ref={iframeRef}
                 key={src}
                 src={src}
                 title={title}

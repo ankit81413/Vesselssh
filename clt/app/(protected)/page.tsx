@@ -29,7 +29,7 @@ export default function Home() {
     {
       Appid: "CodeServer",
       name: "Code Server",
-      icon: "fa-solid fa-terminal",
+      icon: "fa-solid fa-code",
       color: "text-red-400",
     }
   ];

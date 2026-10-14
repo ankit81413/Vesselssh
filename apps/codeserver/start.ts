@@ -50,7 +50,7 @@ async function waitForAppReady(jobId: string, url: string): Promise<void> {
         }
 
         const remaining = deadline - Date.now();
-        if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(250, remaining)));
+        if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(500, remaining)));
     }
 
     throw new Error("Code-server did not become HTTP-ready within 30 seconds. The job may still be starting; check its logs.");
@@ -78,6 +78,6 @@ export async function start() {
     return {
         status: "running",
         clt_url: `http://localhost:${port}/`,
-        data: { ...job, port },
+        job: { ...job, port }
     };
 }
