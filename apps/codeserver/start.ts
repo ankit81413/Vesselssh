@@ -39,18 +39,31 @@ async function waitForAppReady(jobId: string, url: string): Promise<void> {
         try {
             const response = await fetch(url, {
                 redirect: "manual",
-                signal: AbortSignal.timeout(Math.min(2000, deadline - Date.now())),
+                signal: AbortSignal.timeout(Math.min(5000, deadline - Date.now())),
             });
             const ready = (response.status >= 200 && response.status < 400)
                 || response.status === 401 || response.status === 403;
             await response.body?.cancel();
-            if (ready) return;
+            if (ready) {
+
+                if (ready) {
+                    // console.log("Code-server is HTTP-ready. Waiting 1 second...");
+
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                    // console.log("Returning response after 1 second");
+                    return;
+                }
+
+                // console.log("code returned after waititng");
+                // return
+            };
         } catch {
             // Connection refusal/timeouts are expected while the service starts.
         }
 
         const remaining = deadline - Date.now();
-        if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(500, remaining)));
+        if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(250, remaining)));
     }
 
     throw new Error("Code-server did not become HTTP-ready within 30 seconds. The job may still be starting; check its logs.");
@@ -67,17 +80,17 @@ export async function start() {
             args: ["--bind-addr", `127.0.0.1:${port}`, "."],
             cwd: "/",
         }),
-        signal: AbortSignal.timeout(5000),
+        signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) throw new Error(`Could not start code-server: HTTP ${res.status}`);
     const job = await res.json();
     if (!job.data?.id) throw new Error("Job starter did not return a code-server job ID");
 
-    await waitForAppReady(job.data.id, `http://127.0.0.1:${port}/`);
+    await waitForAppReady(job.data.id, `${systemInfo.serverUrl}:${port}/`);
 
     return {
         status: "running",
-        clt_url: `http://localhost:${port}/`,
-        job: { ...job, port }
+        clt_url: `${systemInfo.serverUrl}:${port}/`,
+        data: { ...job, port },
     };
 }

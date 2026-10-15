@@ -4,6 +4,7 @@ export type TaskbarAppType = {
     appId: string;
     label: string;
     icon: string;
+    pinned: boolean;
     isActive: boolean;
     isFocused: boolean;
     tone: string;
@@ -20,7 +21,8 @@ export const useTaskbarAppStore = create<TaskbarAppState>((set) => {
     {
       appId: "Terminal",
       label: "Terminal",
-      icon: "fa-terminal",
+      icon: "fa-solid fa-terminal",
+      pinned: true,
       isActive: false,
       isFocused: false,
       tone: "text-emerald-200",
@@ -28,7 +30,8 @@ export const useTaskbarAppStore = create<TaskbarAppState>((set) => {
     {
       appId: "Files",
       label: "Files",
-      icon: "fa-folder-open",
+      icon: "fa-solid fa-folder-open",
+      pinned: true,
       isActive: false,
       isFocused: false,
       tone: "text-sky-100",
@@ -36,7 +39,8 @@ export const useTaskbarAppStore = create<TaskbarAppState>((set) => {
     {
       appId: "Browser",
       label: "Browser",
-      icon: "fa-globe",
+      icon: "fa-solid fa-globe",
+      pinned: true,
       isActive: false,
       isFocused: false,
       tone: "text-cyan-100",
@@ -44,7 +48,8 @@ export const useTaskbarAppStore = create<TaskbarAppState>((set) => {
     {
       appId: "Monitor",
       label: "Monitor",
-      icon: "fa-chart-simple",
+      icon: "fa-solid fa-chart-simple",
+      pinned: true,
       isActive: false,
       isFocused: false,
       tone: "text-cyan-200",
@@ -52,7 +57,8 @@ export const useTaskbarAppStore = create<TaskbarAppState>((set) => {
     {
       appId: "Settings",
       label: "Settings",
-      icon: "fa-gear",
+      icon: "fa-solid fa-gear",
+      pinned: true,
       isActive: false,
       isFocused: false,
       tone: "text-zinc-100",

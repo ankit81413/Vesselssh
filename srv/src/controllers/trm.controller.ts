@@ -1,4 +1,4 @@
-import {listBackgroundJobs, startBackgroundJob, stopBackgroundJob } from "@cmd/trm/TerminalBacJob.js";
+import { listBackgroundJobs, startBackgroundJob, stopBackgroundJob } from "@cmd/trm/TerminalBacJob.js";
 import { Request, Response } from "express";
 
 export function ListTrmBackGroundJobs(req: Request, res: Response) {

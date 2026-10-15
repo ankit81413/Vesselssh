@@ -1,7 +1,7 @@
 import { useFullscreen } from "@/app/(protected)/hooks/useFullscreen";
 import Image from "next/image";
 import TaskbarClock from "./TaskbarClock";
-import { memo, useEffect } from "react";
+import { memo, useMemo } from "react";
 import { useAppStore } from "../../store/appStore";
 import { useTaskbarAppStore } from "../../store/taskBarApps";
 
@@ -16,28 +16,39 @@ function Taskbar({ currentTime }: TaskbarProps) {
   const apps = useAppStore((s) => s.apps);
   const focusedInstanceId = useAppStore((s) => s.focusedAppId);
   const restoreApp = useAppStore((s) => s.restoreApp);
-  const taskbarApps = useTaskbarAppStore((s) => s.taskbarApps);
+  const minimizeApp = useAppStore((s) => s.minimizeApp);
+  const pinnedApps = useTaskbarAppStore((s) => s.taskbarApps);
 
-  useEffect(() => {
+  const taskbarApps = useMemo(() => {
     const runningApps = apps.filter((app) => app.status === "running");
     const activeAppIds = new Set(runningApps.map((app) => app.appId));
-    const focusedAppId = runningApps.find((app) => app.id === focusedInstanceId && !app.isMinimized)?.appId;
+    const focusedAppId = runningApps.find(
+      (app) => app.id === focusedInstanceId && !app.isMinimized
+    )?.appId;
+    const pinnedAppIds = new Set(pinnedApps.filter((app) => app.pinned).map((app) => app.appId));
+    const unpinnedRunningApps = runningApps.filter(
+      (app, index) =>
+        !pinnedAppIds.has(app.appId) &&
+        runningApps.findIndex((candidate) => candidate.appId === app.appId) === index
+    );
 
-    useTaskbarAppStore.setState((state) => {
-      const taskbarApps = state.taskbarApps.map((app) => {
-        const isActive = activeAppIds.has(app.appId);
-        const isFocused = app.appId === focusedAppId;
-
-        return app.isActive === isActive && app.isFocused === isFocused
-          ? app
-          : { ...app, isActive, isFocused };
-      });
-
-      return taskbarApps.every((app, index) => app === state.taskbarApps[index])
-        ? state
-        : { taskbarApps };
-    });
-  }, [apps, focusedInstanceId]);
+    return [
+      ...pinnedApps.map((app) => ({
+        ...app,
+        isActive: activeAppIds.has(app.appId),
+        isFocused: app.appId === focusedAppId,
+      })),
+      ...unpinnedRunningApps.map((app) => ({
+        appId: app.appId,
+        label: app.name,
+        icon: app.icon,
+        pinned: false,
+        isActive: true,
+        isFocused: app.appId === focusedAppId,
+        tone: "text-cyan-100",
+      })),
+    ];
+  }, [apps, focusedInstanceId, pinnedApps]);
   
 
   return (
@@ -66,8 +77,15 @@ function Taskbar({ currentTime }: TaskbarProps) {
               aria-current={item.isFocused ? "page" : undefined}
               onClick={() => {
                 const instances = apps.filter((app) => app.appId === item.appId && app.status === "running");
+                const focusedInstance = instances.find(
+                  (app) => app.id === focusedInstanceId && !app.isMinimized
+                );
+                if (focusedInstance) {
+                  minimizeApp(focusedInstance.id);
+                  return;
+                }
+
                 const target = instances.find((app) => app.isMinimized)
-                  ?? instances.find((app) => app.id === focusedInstanceId)
                   ?? instances[instances.length - 1];
                 if (target) restoreApp(target.id);
               }}
@@ -76,7 +94,7 @@ function Taskbar({ currentTime }: TaskbarProps) {
                 : "bg-transparent"
                 }`}
             >
-              <i className={`fa-solid ${item.icon} ${item.tone} text-[13px]`} />
+              <i className={`${item.icon} ${item.tone} text-[13px]`} />
               <span
                 className={`absolute bottom-0.5 h-0.5 rounded-full bg-cyan-200 transition-all ${item.isFocused
                   ? "w-4 shadow-[0_0_10px_rgba(103,232,249,0.7)]"
