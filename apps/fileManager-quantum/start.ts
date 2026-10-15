@@ -35,44 +35,24 @@ async function waitForAppReady(jobId: string, url: string): Promise<void> {
         }
         if (Date.now() >= deadline) break;
 
-        // A login redirect or authentication challenge also means HTTP is ready.
+        // The file browser is ready only after its health endpoint confirms it.
         try {
-            const response = await fetch(url, {
-                redirect: "manual",
+            const response = await fetch(`${url}/health`, {
                 signal: AbortSignal.timeout(Math.min(5000, deadline - Date.now())),
             });
-            const ready = (response.status >= 200 && response.status < 400)
-                || response.status === 401 || response.status === 403;
-            await response.body?.cancel();
-            if (ready) {
-
-                if (ready) {
-                    // console.log("File Manager Quantum is HTTP-ready. Waiting 1 second...");
-
-                    while (Date.now() <= deadline) {
-                        await new Promise((resolve) => setTimeout(resolve, 1000));
-                        let a = await fetch(`${url}/health`);
-                        let b = await a.json()
-                        if (b.message == "ok"){
-                            return
-                        }
-                        
-                    }
-
-
-                    // console.log("Returning response after 1 second");
-                    // return;
-                }
-
-                // console.log("File Manager Quantum returned after waititng");
-                // return
-            };
+            if (response.ok) {
+                const health = await response.json() as { message?: string };
+                if (health.message === "ok") {
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    return
+                };
+            }
         } catch {
             // Connection refusal/timeouts are expected while the service starts.
         }
 
         const remaining = deadline - Date.now();
-        if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(250, remaining)));
+        if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(1000, remaining)));
     }
 
     throw new Error("FileManagerQuantum did not become HTTP-ready within 30 seconds. The job may still be starting; check its logs.");
@@ -94,7 +74,7 @@ export async function start() {
     const job = await res.json();
     if (!job.data?.id) throw new Error("Job starter did not return a File Manager Quantum job ID");
 
-    // await waitForAppReady(job.data.id, `${systemInfo.serverUrl}:${port}/`);
+    await waitForAppReady(job.data.id, `${systemInfo.serverUrl}:${port}`);
 
     return {
         status: "running",

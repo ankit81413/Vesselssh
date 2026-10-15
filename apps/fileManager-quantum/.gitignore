@@ -1,1 +1,15 @@
-node_modules
+node_modules/
+
+# File Browser runtime state and SQLite sidecar files
+data/db/
+
+# Generated search indexes, icon cache, and disk cache
+tmp/
+
+# Local environment overrides and logs
+.env
+.env.*
+*.log
+
+# OS metadata
+.DS_Store
