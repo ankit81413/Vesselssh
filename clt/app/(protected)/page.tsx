@@ -31,6 +31,12 @@ export default function Home() {
       name: "Code Server",
       icon: "fa-solid fa-code",
       color: "text-red-400",
+    },
+    {
+      Appid: "QuantumFileManager",
+      name: "Vessel File Manager",
+      icon: "fa-solid fa-folder",
+      color: "text-blue-400",
     }
   ];
 

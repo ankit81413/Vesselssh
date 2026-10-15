@@ -90,6 +90,7 @@ const ALLOWED_COMMANDS = new Set([
     "code-server",
     "node",
     "npm",
+    "filebrowser"
 ]);
 
 function getCommandName(command: string): string {
@@ -137,7 +138,7 @@ export function startBackgroundJob(
     }
 
     if (!ALLOWED_COMMANDS.has(getCommandName(command))) {
-        throw new Error("Executable is not allowed");
+        throw new Error(`Executable is not allowed : ${getCommandName(command)}`);
     }
 
     if (!path.isAbsolute(cwd)) {

@@ -10,5 +10,11 @@
         "name": "Code Server",
         "start": "apps/codeserver/start.ts",
         "onclose" : "apps/codeserver/onclose.ts"
+    },
+    "QuantumFileManager": {
+        "appId": 3,
+        "name": "FileManager Quantum",
+        "start": "apps/fileManager-quantum/start.ts",
+        "onclose" : "apps/fileManager-quantum/onclose.ts"
     }
 }
