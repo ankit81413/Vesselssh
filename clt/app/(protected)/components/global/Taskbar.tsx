@@ -1,9 +1,11 @@
 import { useFullscreen } from "@/app/(protected)/hooks/useFullscreen";
 import Image from "next/image";
+import logo from "@/public/logo.png"
 import TaskbarClock from "./TaskbarClock";
-import { memo, useMemo } from "react";
+import { memo, useMemo} from "react";
 import { useAppStore } from "../../store/appStore";
 import { useTaskbarAppStore } from "../../store/taskBarApps";
+import TaskbarPowerbutton from "./TaskbarPowerbutton";
 
 type TaskbarProps = {
   currentTime: Date | null;
@@ -60,7 +62,7 @@ function Taskbar({ currentTime }: TaskbarProps) {
           className="grid h-8 w-15 shrink-0 place-items-center rounded-md text-cyan-100 shadow-sm shadow-cyan-950/30 transition hover:bg-cyan-200/22 focus:outline-none focus:ring-2 focus:ring-cyan-200/55"
         >
           <Image
-            src="/logo.svg"
+            src={logo}
             width={100}
             height={100}
             className="h-8"
@@ -122,20 +124,14 @@ function Taskbar({ currentTime }: TaskbarProps) {
           >
             <i className="fa-solid fa-expand"></i>
           </button>
-          <button
+          {/* <button
             title="Audio"
             aria-label="Audio controls"
             className="hidden h-8 w-8 place-items-center rounded-md hover:bg-cyan-100/12 sm:grid"
           >
             <i className="fa-solid fa-volume-high text-xs" />
-          </button>
-          <button
-            title="Power"
-            aria-label="Power menu"
-            className="hidden h-8 w-8 place-items-center rounded-md hover:bg-cyan-100/12 md:grid"
-          >
-            <i className="fa-solid fa-power-off text-xs" />
-          </button>
+          </button> */}
+          <TaskbarPowerbutton />
           <TaskbarClock currentTime={currentTime} />
         </div>
       </div>

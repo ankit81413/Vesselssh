@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import wallpaper from "@/app/(protected)/assets/lockscreenWallpaper.jpg";
 import desktopWallpaper from "@/app/(protected)/assets/HomeWallpaper.jpg";
-import logo from "@/public/logo.svg"
+import logo from "@/public/logo.png"
 import dp from "@/app/(protected)/assets/dp.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

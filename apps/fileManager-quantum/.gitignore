@@ -1,7 +1,8 @@
 node_modules/
 
 # File Browser runtime state and SQLite sidecar files
-data/db/
+data/db
+config.yaml
 
 # Generated search indexes, icon cache, and disk cache
 tmp/
