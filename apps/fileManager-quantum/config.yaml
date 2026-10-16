@@ -14,12 +14,19 @@ server:
         defaultPermissions:
           view: true
           download: true
+          modify: true
+          delete: true
+          create: true
   database:
-    path: "/home/charlie/Vesselssh/apps/fileManager-quantum/data/db/filebrowser.sqlite"
+    path: "./data/db/filebrowser.sqlite"
 auth:
   adminUsername: "**hidden**"
   adminPassword: "**hidden**"
 frontend:
-  name: "Vessel File Manager"
+  name: "Vessel FileBrowser"
+userDefaults:
+  account:
+    permissions:
+      share: true
 http:
   port: 48287
