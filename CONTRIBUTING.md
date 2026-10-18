@@ -1,90 +1,44 @@
-# VesselSSH Contributor License Agreement (CLA)
+# Contributing to VesselSSH
 
-Thanks for contributing to VesselSSH!
+Thanks for your interest in contributing to VesselSSH!
 
-This agreement explains how your contributions can be used in VesselSSH. Please read it before accepting.
+VesselSSH is an open-source tool for server management and development. You can contribute by fixing bugs, adding features, improving documentation, or suggesting new ideas.
 
-## 1. Ownership
+## How to Contribute
 
-You keep ownership and copyright of the code, documentation, or other work you contribute to VesselSSH.
+1. Check existing issues or create a new issue to discuss your idea.
+2. Fork the repository and create a branch for your changes.
+3. Make your changes and test them.
+4. Open a pull request and explain what you changed.
+5. Respond to feedback if any changes are needed.
 
-You do not transfer ownership of your contributions to the project maintainer.
+## Contribution Guidelines
 
-## 2. Permission to Use Contributions
+- Follow the existing code structure and coding style.
+- Keep pull requests focused on the changes you want to make.
+- Test your changes before submitting a pull request.
+- Never commit passwords, API keys, private keys, or other sensitive information.
+- Consider security when working with server commands, authentication, permissions, file operations, and background jobs.
+- Update the documentation when needed.
 
-You give the VesselSSH project maintainer permanent, worldwide, royalty-free permission to use, copy, modify, and include your contributions in VesselSSH.
+## Contributor License Agreement (CLA)
 
-This permission allows the project to release your contributions under the open-source licenses listed in Section 3, subject to this agreement.
+Before your pull request can be merged, you must accept the [VesselSSH Contributor License Agreement](./CLA.md).
 
-## 3. Future License Changes
+The CLA explains how your contributions can be used by the project and the rights granted to the project under the agreement.
 
-VesselSSH is currently licensed under the GNU General Public License v3.0 (GPL-3.0).
+VesselSSH is currently licensed under GPL-3.0. In the future, it may adopt another open-source license from the list specified in the CLA.
 
-In the future, VesselSSH may be released under any of the following open-source licenses:
+Contributors retain ownership of their contributions, subject to the rights granted under the CLA.
 
-- GNU General Public License v3.0 (GPL-3.0)
-- Apache License 2.0
-- MIT License
-- BSD 2-Clause License
-- BSD 3-Clause License
-- Boost Software License 1.0
-- Eclipse Public License 2.0
-- GNU Affero General Public License v3.0 (AGPL-3.0)
-- GNU General Public License v2.0 (GPL-2.0)
-- GNU Lesser General Public License v2.1 (LGPL-2.1)
-- Mozilla Public License 2.0 (MPL-2.0)
+Please read the CLA carefully before accepting it. Your acceptance must be verified before your pull request can be merged.
 
-VesselSSH will remain an open-source project. This agreement does not permit relicensing VesselSSH under a proprietary or closed-source license.
+## License
 
-The project may not use a license outside this list under the permissions granted by this agreement. Adding another license to the list will require an appropriate agreement update and any additional permissions required from affected contributors.
+VesselSSH is currently licensed under the GNU General Public License v3.0 (GPL-3.0). See the [`LICENSE`](./LICENSE) file for details.
 
-Changing the license will not remove rights already granted to users under previously released versions.
+## Need Help?
 
-## 4. Your Contributions
-
-By submitting a contribution, you confirm that:
-
-- You created it yourself or have permission to submit it.
-- You have the right to grant the permissions described in this agreement.
-- You have identified any third-party code or materials and their licenses.
-- Your contribution does not knowingly violate another person's rights.
-
-If your employer or another person owns your contribution, get the necessary permission before submitting it.
-
-## 5. Third-Party Materials
-
-Do not submit someone else's code, images, or other materials unless you have permission to use them.
-
-Tell the project maintainer about any third-party materials and their licenses.
-
-This agreement does not override the license terms of third-party materials.
-
-## 6. Patent Permission
-
-If you own or control patent rights that are necessarily affected by your contribution, you grant the project maintainer and recipients of VesselSSH permission to use those rights as needed to use and distribute your contribution.
-
-This permission applies only to patent rights you are legally allowed to license.
-
-## 7. Contribution Review
-
-The project maintainer is not required to accept or merge any contribution. All contributions are subject to review.
-
-## 8. Warranty
-
-You provide your contributions as they are, without guarantees, unless required by law or agreed otherwise in writing.
-
-You are not required to provide support or updates for your contributions.
-
-## 9. Acceptance
-
-You must accept this agreement before your pull request can be merged.
-
-Your acceptance will be recorded through the project's designated CLA process.
-
-By accepting, you confirm that you have read and agreed to this agreement.
-
-## 10. Questions
-
-If you have questions about this agreement, open an issue in the VesselSSH repository.
+If you have questions or ideas, open an issue in the repository.
 
 Thanks for helping improve VesselSSH!
