@@ -4,7 +4,8 @@ export type AppInstance = {
   id: string;
   appId: string;
   name: string;
-  icon: string
+  icon: string;
+  color:string;
   status: "running" | "stopped" | "error";
   isMinimized?: boolean;
   initialBounds?: { width: number; height: number; x: number; y: number };

@@ -9,13 +9,14 @@ export default function Home() {
   const addApp = useAppStore((s) => s.addApp);
 
 
-  const openApp = (appId: string, name: string, icon: string) => {
+  const openApp = (appId: string, name: string, icon: string, color: string) => {
     addApp({
       id: crypto.randomUUID(),
       appId: appId,
       name: name,
       status: "running",
-      icon: icon
+      icon: icon,
+      color:color
     });
   };
 
@@ -37,6 +38,12 @@ export default function Home() {
       name: "Vessel File Manager",
       icon: "fa-solid fa-folder",
       color: "text-blue-400",
+    },
+    {
+      Appid: "Karo",
+      name: "Karo - Proc",
+      icon: "fa-solid fa-list-check",
+      color: "text-gray-800",
     }
   ];
 
@@ -49,7 +56,7 @@ export default function Home() {
               <button
                 key={app.Appid}
                 type="button"
-                onClick={() => openApp(app.Appid, app.name, app.icon)}
+                onClick={() => openApp(app.Appid, app.name, app.icon, app.color)}
                 className="group flex min-h-[76px] w-full flex-col items-center justify-center gap-2 rounded-lg p-2 text-center transition-colors hover:bg-white/10"
                 title={`Double-click to open ${app.name}`}
               >
@@ -75,12 +82,8 @@ export default function Home() {
           initialPosition={app.initialBounds}
           title={app.name}
           src={`http://localhost:48283/app/${app.appId}`}
-          icon={
-            <i
-              aria-hidden="true"
-              className={`${app.icon} text-red-400 w-2 h-2 text-[10px]`}
-            />
-          }
+          icon={`${app.icon}`}
+          color={`${app.color}`}
           beforeClose={() => {
             console.log("Apps External function closed");
           }}

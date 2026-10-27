@@ -10,7 +10,8 @@ type ResizeGeometry = { width: number; height: number; x: number; y: number };
 type AppWindowProps = {
   title: string;
   src: string;
-  icon?: ReactNode;
+  icon?: string;
+  color?:string;
   id: string,
   beforeClose: () => void;
   onResize?: (size: { width: number; height: number }) => void;
@@ -44,6 +45,7 @@ export default function AppWindow({
   title,
   src,
   icon,
+  color,
   id,
   beforeClose,
   onResize,
@@ -66,7 +68,7 @@ export default function AppWindow({
 
   function postCloseMessage() {
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "CLOSE_APP" },"http://localhost:48283"
+      { type: "CLOSE_APP" }, "http://localhost:48283"
     )
   }
 
@@ -193,7 +195,7 @@ export default function AppWindow({
       if (event.data?.type === "APP_CLOSED") {
         console.info(`Closing App with id : ${id}`)
         removeApp(id)
-        
+
       }
 
       if (event.data?.type === "APP_CLOSE_FAILED") {
@@ -378,7 +380,7 @@ export default function AppWindow({
           >
             <div className="AppWindowimageContainer overflow-hidden rounded rounded-xl">
 
-              <Image src="/yt.png" alt="App" width={100} height={100} />
+            {icon ? <i className={`${icon} ${color} text-[70px] h-[70px] w-[70px] `}></i> : <i className="fa-regular fa-window-maximize text-[13px] h-2 w-2" />}
             </div>
           </span>
 
@@ -496,7 +498,7 @@ export default function AppWindow({
                 aria-hidden="true"
                 className="flex shrink-0 items-center text-cyan-200"
               >
-                {icon ?? <i className="fa-regular fa-window-maximize text-[13px] h-2 w-2" />}
+                {icon ? <i className={`${icon} ${color} text-[13px] h-2 w-2`}></i> : <i className="fa-regular fa-window-maximize text-[13px] h-2 w-2" />}
               </span>
               <h2
                 id={titleId}
@@ -552,7 +554,7 @@ export default function AppWindow({
                 </button>
               </div>
             </header>
-            <div ref={content} className="relative min-h-0 flex-1 bg-black">
+            <div ref={content} className="relative min-h-0 flex-1 bg-white">
               <iframe
                 ref={iframeRef}
                 key={src}

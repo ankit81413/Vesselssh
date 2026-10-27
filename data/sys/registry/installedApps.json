@@ -16,5 +16,11 @@
         "name": "FileManager Quantum",
         "start": "apps/fileManager-quantum/start.ts",
         "onclose" : "apps/fileManager-quantum/onclose.ts"
+    },
+    "Karo": {
+        "appId": 2,
+        "name": "Karo - Process Manager",
+        "start": "apps/karo/start.ts",
+        "onclose" : "apps/karo/onclose.ts"
     }
 }
